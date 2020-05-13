@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function RenderList({ allLists }) {
+function RenderList({ allLists, deleteList }) {
   const [newTodo, setNewTodo] = useState('Add todo');
   const [newList, setNewList] = useState('New list');
   const [newListName, setNewListName] = useState('List name');
@@ -16,6 +16,8 @@ function RenderList({ allLists }) {
     console.log(newList);
   }
 
+
+
   let listInfo;
   if (!allLists) {
     listInfo = <p>You don´t have any lists</p>;
@@ -24,14 +26,15 @@ function RenderList({ allLists }) {
       return (
         <section className='listContainer' key={list.id}>
           {list.name}
-          <form>
+          <button onClick={(e) => deleteList(e, list.id)}>Delete list</button>
+          {/* <form>
             <input
               type='text'
               value={newListName}
               onChange={(e) => setNewListName(e.target.value)}
             />
             <button onClick={(e) => changeListName(e)}>Change name</button>
-          </form>
+          </form> */}
           <ul>
             <li>Item / Todo</li>
             <li>Item / Todo</li>

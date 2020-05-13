@@ -43,6 +43,23 @@ function App() {
       });
   }
 
+  function deleteList(e, id){
+    e.preventDefault();
+    console.log(id);
+    axios
+      .delete(`http://localhost:8090/lists/${id}`)
+      .then((res) => {
+        console.log(res);
+        let theNewList = allLists.filter(x => {
+          return x.id !== id;
+        });
+        setAllLists(theNewList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   console.log(allLists);
   function changeListName(e) {
     e.preventDefault();
@@ -53,7 +70,7 @@ function App() {
     <div className='App'>
       <header>Organize</header>
       <main className='board'>
-        <RenderList allLists={allLists} />
+        <RenderList allLists={allLists} deleteList={deleteList}/>
 
         <section className='listContainer'>
           Create a new list

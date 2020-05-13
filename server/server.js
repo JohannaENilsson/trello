@@ -115,11 +115,31 @@ listRouter.post('/', (req, res) => {
   res.status(201).send(data);
 });
 
-// listRouter.delete('/board/:id', (req, res) => {});
+listRouter.delete('/:id', (req, res) => {
+    let id = parseInt(req.params.id)
 
-// listRouter.get('/board', (req, res) => {});
+    lists = lists.filter(function (list) {
+        return list.id !== id;
+      });
+      res.status(204).end();
 
-// listRouter.patch('/board/:id', (req, res) => {});
+
+    //   // om id inte finns 
+    //   let keepLooking = true;
+    // let noId = lists.find(function (list) {
+    //     while(keepLooking === true)
+    //     return list.id !== id;
+    //   });
+
+    //   if(!noId){
+
+    //   }
+
+    
+});
+
+
+// listRouter.patch('/board/:id', (req, res) => {}); // ********* EXTRA UPPDATERA NAMNET
 
 app.use('/lists', listRouter);
 
