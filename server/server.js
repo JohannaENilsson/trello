@@ -10,11 +10,11 @@ const app = express();
 let lists = [
   {
     id: 1,
-    listName: 'Todo',
+    name: 'Todo',
   },
   {
     id: 2,
-    listName: 'Inprogress',
+    name: 'Inprogress',
   },
 ];
 
@@ -45,6 +45,8 @@ let items = [
   },
 ];
 
+let listID = 4;
+
 // {listId: String, itemId :string}
 let relationListItem = [];
 
@@ -71,33 +73,46 @@ app.use((req, res, next) => {
   next();
 });
 
-
 let listRouter = express.Router();
 listRouter.get('/', (req, res) => {
   res.status(200).send(lists);
 });
 
 listRouter.get('/:id', (req, res) => {
-    let id = parseInt(req.params.id);
-    let list = lists.find( function(list){
-        return list.id === id;
-    });
-// Kollar så det finns någon id som matchar
-    if(list){
-        res.status(200).send(list);
-    } else {
-        res.status(404).end();
-        return; 
-    }
+  let id = parseInt(req.params.id);
+  let list = lists.find(function (list) {
+    return list.id === id;
+  });
+  // Kollar så det finns någon id som matchar
+  if (list) {
+    res.status(200).send(list);
+  } else {
+    res.status(404).end();
+    return;
+  }
 });
 
+function removeBlankSpace(data) {
+  let removeWhiteSpace = data.name.trim();
+
+  return removeWhiteSpace;
+}
+
 listRouter.post('/', (req, res) => {
-    let data = req.body;
-    if(!data.listName){
-        res.status(400).end();
-        return;
-    }
-    
+  let data = req.body;
+//   console.log('req is ', req.body);
+  let isValid = removeBlankSpace(data);
+//   console.log(isValid.length);
+  if (isValid.length < 2) {
+    res.status(406).end();
+    return;
+  }
+  data.id = listID;
+  data.name = isValid;
+
+  listID++;
+  lists.push(data);
+  res.status(201).send(data);
 });
 
 // listRouter.delete('/board/:id', (req, res) => {});

@@ -27,6 +27,15 @@ function App() {
   function createNewList(e) {
     e.preventDefault();
     console.log(newList);
+
+    axios
+    .post('http://localhost:8090/lists', {name: newList})
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   function changeListName(e) {
