@@ -3,16 +3,20 @@ import axios from 'axios';
 
 import './App.css';
 
+import RenderList from './RenderList';
+
 function App() {
   const [newTodo, setNewTodo] = useState('Add todo');
   const [newList, setNewList] = useState('New list');
-  const [newListName, setNewListName] = useState('List name')
+  const [newListName, setNewListName] = useState('List name');
+  const [allLists, setAllLists] = useState(null);
 
   useEffect(() => {
     axios
       .get('http://localhost:8090/lists')
       .then((res) => {
         console.log(res.data);
+        setAllLists(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -29,15 +33,17 @@ function App() {
     console.log(newList);
 
     axios
-    .post('http://localhost:8090/lists', {name: newList})
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .post('http://localhost:8090/lists', { name: newList })
+      .then((res) => {
+        console.log(res.data);
+        setAllLists([...allLists, res.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
+  console.log(allLists);
   function changeListName(e) {
     e.preventDefault();
     console.log(newList);
@@ -47,36 +53,17 @@ function App() {
     <div className='App'>
       <header>Organize</header>
       <main className='board'>
-        <section className='listContainer'>
-          I´m a list container
-          <form onClick={(e) => changeListName(e)}>
-          <input type='text' value={newListName} onChange={(e) => setNewListName(e.target.value)}/>
-          <button>Change name</button>
-          </form>
-          <ul>
-            <li>Item / Todo</li>
-            <li>Item / Todo</li>
-            <li>Item / Todo / Item / Todo / Item / Todo</li>
-          </ul>
-          <form onClick={(e) => addTodo(e)} >
-            <input
-              type='text'
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
-            />
-            <button>Add todo</button>
-          </form>
-        </section>
+        <RenderList allLists={allLists} />
 
         <section className='listContainer'>
           Create a new list
-          <form onClick={(e) => createNewList(e)}>
+          <form>
             <input
               type='text'
               value={newList}
               onChange={(e) => setNewList(e.target.value)}
             />
-            <button>Add new list</button>
+            <button onClick={(e) => createNewList(e)}>Add new list</button>
           </form>
         </section>
       </main>
