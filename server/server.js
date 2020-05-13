@@ -100,9 +100,9 @@ function removeBlankSpace(data) {
 
 listRouter.post('/', (req, res) => {
   let data = req.body;
-//   console.log('req is ', req.body);
+  //   console.log('req is ', req.body);
   let isValid = removeBlankSpace(data);
-//   console.log(isValid.length);
+  //   console.log(isValid.length);
   if (isValid.length < 2) {
     res.status(406).end();
     return;
@@ -116,28 +116,29 @@ listRouter.post('/', (req, res) => {
 });
 
 listRouter.delete('/:id', (req, res) => {
-    let id = parseInt(req.params.id)
+  let id = parseInt(req.params.id);
 
-    lists = lists.filter(function (list) {
-        return list.id !== id;
-      });
-      res.status(204).end();
+  lists = lists.filter(function (list) {
+    return list.id !== id;
+  });
 
+  let isRemoved = true;
+  //   // om id inte finns skicka 404
+  //   let keepLooking = true;
+  lists.filter(function (list) {
+    if (list.id !== id) {
+      return (isRemoved = true);
+    } else {
+      return (isRemoved = false);
+    }
+  });
 
-    //   // om id inte finns 
-    //   let keepLooking = true;
-    // let noId = lists.find(function (list) {
-    //     while(keepLooking === true)
-    //     return list.id !== id;
-    //   });
-
-    //   if(!noId){
-
-    //   }
-
-    
+  if (isRemoved) {
+    res.status(204).end();
+  } else {
+    res.status(404).end();
+  }
 });
-
 
 // listRouter.patch('/board/:id', (req, res) => {}); // ********* EXTRA UPPDATERA NAMNET
 
