@@ -36,3 +36,10 @@ main{
   width: 250px;
   min-height: 250px;
 }
+
+.message{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+}

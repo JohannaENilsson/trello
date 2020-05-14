@@ -3,7 +3,7 @@ const app = express();
 
 // Board -> collection -> board
 // list -> obj {name: listName, items: [{title: str, description: str, created: date}]}
-// item -> obj {title: str, description: str, created: date}
+// item -> obj {title: str, description: str, created: date, listId:}
 
 // middleware to parse data
 
@@ -24,24 +24,28 @@ let items = [
     name: 'Cook food',
     description: 'make som delicious vegan food',
     data: 'create time',
+    listId: 1,
   },
   {
     id: 002,
     name: 'Watch movie',
     description: 'Se all Anthony Hopkins movies',
     data: 'create time',
+    listId: 1,
   },
   {
     id: 003,
     name: 'Pet the cat',
     description: 'Give her some love',
     data: 'create time',
+    listId: 1,
   },
   {
     id: 004,
     name: 'Code',
     description: 'Learn how to code',
     data: 'create time',
+    listId: 2,
   },
 ];
 
@@ -73,6 +77,14 @@ app.use((req, res, next) => {
   next();
 });
 
+let itemRouter = express.Router();
+itemRouter.get('/', (req, res) => {
+  res.status(200).send(items);
+});
+
+app.use('/items', itemRouter);
+
+
 let listRouter = express.Router();
 listRouter.get('/', (req, res) => {
   res.status(200).send(lists);
@@ -94,7 +106,6 @@ listRouter.get('/:id', (req, res) => {
 
 function removeBlankSpace(data) {
   let removeWhiteSpace = data.name.trim();
-
   return removeWhiteSpace;
 }
 
@@ -123,8 +134,6 @@ listRouter.delete('/:id', (req, res) => {
   });
 
   let isRemoved = true;
-  //   // om id inte finns skicka 404
-  //   let keepLooking = true;
   lists.filter(function (list) {
     if (list.id !== id) {
       return (isRemoved = true);
@@ -139,7 +148,6 @@ listRouter.delete('/:id', (req, res) => {
     res.status(404).end();
   }
 });
-
 // listRouter.patch('/board/:id', (req, res) => {}); // ********* EXTRA UPPDATERA NAMNET
 
 app.use('/lists', listRouter);

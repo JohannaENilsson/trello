@@ -8,15 +8,28 @@ import RenderList from './RenderList';
 function App() {
   const [newTodo, setNewTodo] = useState('Add todo');
   const [newList, setNewList] = useState('New list');
-  const [newListName, setNewListName] = useState('List name');
   const [allLists, setAllLists] = useState(null);
+  const [allItems, setAllItems] = useState(null);
 
   useEffect(() => {
     axios
-      .get('http://localhost:8090/lists')
+      .get('/lists')
       .then((res) => {
         console.log(res.data);
         setAllLists(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+
+  useEffect(() => {
+    axios
+      .get('/items')
+      .then((res) => {
+        console.log('items ', res.data);
+        setAllItems(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -33,7 +46,7 @@ function App() {
     console.log(newList);
 
     axios
-      .post('http://localhost:8090/lists', { name: newList })
+      .post('/lists', { name: newList })
       .then((res) => {
         console.log(res.data);
         setAllLists([...allLists, res.data]);
@@ -47,7 +60,7 @@ function App() {
     e.preventDefault();
     console.log(id);
     axios
-      .delete(`http://localhost:8090/lists/${id}`)
+      .delete(`/lists/${id}`)
       .then((res) => {
         console.log(res);
         let theNewList = allLists.filter(x => {
@@ -70,7 +83,7 @@ function App() {
     <div className='App'>
       <header>Organize</header>
       <main className='board'>
-        <RenderList allLists={allLists} deleteList={deleteList}/>
+        <RenderList allLists={allLists} deleteList={deleteList} allItems={allItems}/>
 
         <section className='listContainer'>
           Create a new list
