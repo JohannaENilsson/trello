@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
-function RenderList({ allLists, deleteList, allItems }) {
-  const [newTodo, setNewTodo] = useState('Add todo');
-  const [newList, setNewList] = useState('New list');
+import CreateTodo from './CreateTodo';
+
+function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
+  // const [newList, setNewList] = useState('New list');
   // const [newListName, setNewListName] = useState('List name');
 
-  function addTodo(e) {
-    e.preventDefault();
-    console.log(newTodo);
-  }
+  // function addTodo(e) {
+  //   e.preventDefault();
+  //   console.log(newTodo);
+  // }
 
-  function changeListName(e) {
-    e.preventDefault();
-    console.log(newList);
-  }
+  // function changeListName(e) {
+  //   e.preventDefault();
+  //   console.log(newList);
+  // }
 
   function renderItems(listId) {
     let itemInfo;
@@ -24,12 +24,14 @@ function RenderList({ allLists, deleteList, allItems }) {
       return (itemInfo = <p>You have no todos</p>);
     } else {
       return (itemInfo = allItems.map((item) => {
+        // get item som matchar list id
         if (listId === item.listId) {
           return (
-            <div key={item.id}>
-              <p>{item.name}</p>
+            <li key={item.id}>
+              <span>{item.name}</span>
+              <button onClick={(e) => deleteItem(e, item.id)}>X</button>
               <p>{item.description}</p>
-            </div>
+            </li>
           );
         }
       }));
@@ -64,21 +66,9 @@ function RenderList({ allLists, deleteList, allItems }) {
             />
             <button onClick={(e) => changeListName(e)}>Change name</button>
           </form> */}
-          {item}
 
-          <ul>
-            <li>Item / Todo</li>
-            <li>Item / Todo</li>
-            <li>Item / Todo / Item / Todo / Item / Todo</li>
-          </ul>
-          <form>
-            <input
-              type='text'
-              value={newTodo}
-              onChange={(e) => setNewTodo(e.target.value)}
-            />
-            <button onClick={(e) => addTodo(e)}>Add todo</button>
-          </form>
+          <ul>{item}</ul>
+          {<CreateTodo listId={list.id} addTodo={addTodo} />}
         </section>
       );
     });

@@ -77,14 +77,39 @@ app.use((req, res, next) => {
   next();
 });
 
+
+// ITEM ********************************************************************** */
 let itemRouter = express.Router();
 itemRouter.get('/', (req, res) => {
   res.status(200).send(items);
 });
 
+itemRouter.delete('/:id', (req, res) => {
+  let id = parseInt(req.params.id);
+
+  items = items.filter(function (item) {
+    return item.id !== id;
+  });
+
+  let isRemoved = true;
+  items.filter(function (item) {
+    if (item.id !== id) {
+      return (isRemoved = true);
+    } else {
+      return (isRemoved = false);
+    }
+  });
+
+  if (isRemoved) {
+    res.status(204).end();
+  } else {
+    res.status(404).end();
+  }
+});
+
 app.use('/items', itemRouter);
 
-
+// LIST ********************************************************************** */
 let listRouter = express.Router();
 listRouter.get('/', (req, res) => {
   res.status(200).send(lists);
@@ -126,6 +151,7 @@ listRouter.post('/', (req, res) => {
   res.status(201).send(data);
 });
 
+// Om en lista raderas måste itemsen som är kopplade till listan raderas *******
 listRouter.delete('/:id', (req, res) => {
   let id = parseInt(req.params.id);
 

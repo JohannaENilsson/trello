@@ -6,7 +6,7 @@ import './App.css';
 import RenderList from './RenderList';
 
 function App() {
-  const [newTodo, setNewTodo] = useState('Add todo');
+  // const [newTodo, setNewTodo] = useState('Add todo');
   const [newList, setNewList] = useState('New list');
   const [allLists, setAllLists] = useState(null);
   const [allItems, setAllItems] = useState(null);
@@ -23,7 +23,6 @@ function App() {
       });
   }, []);
 
-
   useEffect(() => {
     axios
       .get('/items')
@@ -36,9 +35,9 @@ function App() {
       });
   }, []);
 
-  function addTodo(e) {
+  function addTodo(e, id, newTodo) {
     e.preventDefault();
-    console.log(newTodo);
+    console.log('Create todo in list id ', id, newTodo);
   }
 
   function createNewList(e) {
@@ -50,20 +49,21 @@ function App() {
       .then((res) => {
         console.log(res.data);
         setAllLists([...allLists, res.data]);
+        setNewList('');
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-  function deleteList(e, id){
+  function deleteList(e, id) {
     e.preventDefault();
     console.log(id);
     axios
       .delete(`/lists/${id}`)
       .then((res) => {
         console.log(res);
-        let theNewList = allLists.filter(x => {
+        let theNewList = allLists.filter((x) => {
           return x.id !== id;
         });
         setAllLists(theNewList);
@@ -73,17 +73,40 @@ function App() {
       });
   }
 
-  console.log(allLists);
-  function changeListName(e) {
+  function deleteItem(e, id) {
     e.preventDefault();
-    console.log(newList);
+    console.log(id);
+    axios
+      .delete(`/items/${id}`)
+      .then((res) => {
+        console.log(res);
+        let theNewItems = allItems.filter((x) => {
+          return x.id !== id;
+        });
+        setAllItems(theNewItems);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
+
+  // console.log(allLists);
+  // function changeListName(e) {
+  //   e.preventDefault();
+  //   console.log(newList);
+  // }
 
   return (
     <div className='App'>
       <header>Organize</header>
       <main className='board'>
-        <RenderList allLists={allLists} deleteList={deleteList} allItems={allItems}/>
+        <RenderList
+          allLists={allLists}
+          deleteList={deleteList}
+          allItems={allItems}
+          deleteItem={deleteItem}
+          addTodo={addTodo}
+        />
 
         <section className='listContainer'>
           Create a new list
