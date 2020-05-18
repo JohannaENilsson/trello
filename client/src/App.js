@@ -37,7 +37,14 @@ function App() {
 
   function addTodo(e, id, newTodo) {
     e.preventDefault();
+    newTodo.listId = id; 
     console.log('Create todo in list id ', id, newTodo);
+    axios.post('/items', newTodo)
+    .then(res => {
+      console.log(res.data);
+      setAllItems([...allItems, res.data]);
+
+    })
   }
 
   function createNewList(e) {
@@ -90,7 +97,7 @@ function App() {
       });
   }
 
-  // console.log(allLists);
+  
   // function changeListName(e) {
   //   e.preventDefault();
   //   console.log(newList);

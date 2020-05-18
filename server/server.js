@@ -51,6 +51,8 @@ let items = [
 
 let listID = 4;
 
+let itemID = 5;
+
 // {listId: String, itemId :string}
 let relationListItem = [];
 
@@ -83,6 +85,27 @@ let itemRouter = express.Router();
 itemRouter.get('/', (req, res) => {
   res.status(200).send(items);
 });
+
+
+itemRouter.post('/', (req, res) => {
+  let data = req.body;
+    console.log('req is ', req.body);
+  let isValid = removeBlankSpace(data);
+    console.log(isValid.length);
+  if (isValid.length < 2) {
+    res.status(406).end();
+    return;
+  }
+  data.id = `00${itemID}`;
+  data.name = isValid;
+  data.data = 'create time';
+  data.listId = data.listId;
+
+  itemID++;
+  items.push(data);
+  res.status(201).send(data);
+});
+
 
 itemRouter.delete('/:id', (req, res) => {
   let id = parseInt(req.params.id);
