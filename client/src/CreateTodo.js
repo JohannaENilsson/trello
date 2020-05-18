@@ -16,7 +16,7 @@ export default function CreateTodo({ listId, addTodo }) {
 
   function submitTodo(e) {
     e.preventDefault();
-    if (newTodo.name > 1) {
+    if (newTodo.name.length > 1) {
       addTodo(e, listId, newTodo);
 
       setTimeout(() => {

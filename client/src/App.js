@@ -54,7 +54,7 @@ function App() {
   function createNewList(e) {
     e.preventDefault();
     console.log(newList);
-    if(newList.name > 1){
+    if(newList.length > 0){
       axios
           .post('/lists', { name: newList })
           .then((res) => {

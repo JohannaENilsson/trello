@@ -23,28 +23,28 @@ let items = [
     id: 001,
     name: 'Cook food',
     description: 'make som delicious vegan food',
-    data: 'create time',
+    time: 'create time',
     listId: 1,
   },
   {
     id: 002,
     name: 'Watch movie',
     description: 'Se all Anthony Hopkins movies',
-    data: 'create time',
+    time: 'create time',
     listId: 1,
   },
   {
     id: 003,
     name: 'Pet the cat',
     description: 'Give her some love',
-    data: 'create time',
+    time: 'create time',
     listId: 1,
   },
   {
     id: 004,
     name: 'Code',
     description: 'Learn how to code',
-    data: 'create time',
+    time: 'create time',
     listId: 2,
   },
 ];
@@ -86,6 +86,13 @@ itemRouter.get('/', (req, res) => {
   res.status(200).send(items);
 });
 
+function timeStamp(){
+  let date = new Date();
+  let theDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+  console.log('the date IS ', theDate);
+  return theDate;
+}
+
 
 itemRouter.post('/', (req, res) => {
   let data = req.body;
@@ -96,9 +103,10 @@ itemRouter.post('/', (req, res) => {
     res.status(406).end();
     return;
   }
+  let theDate = timeStamp();
   data.id = `00${itemID}`;
   data.name = isValid;
-  data.data = 'create time';
+  data.time = theDate;
   data.listId = data.listId;
 
   itemID++;
