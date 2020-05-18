@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import CreateTodo from './CreateTodo';
 
@@ -17,13 +17,12 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
   // }
 
   function renderItems(listId) {
-    let itemInfo;
     if (!allItems) {
-      return (itemInfo = <p>Loading...</p>);
+      return <p>Loading...</p>;
     } else if (allItems.length === 0) {
-      return (itemInfo = <p>You have no todos</p>);
+      return <p>You have no todos</p>;
     } else {
-      return (itemInfo = allItems.map((item) => {
+      return allItems.map((item) => {
         // get item som matchar list id
         if (listId === item.listId) {
           return (
@@ -33,8 +32,11 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
               <p>{item.description}</p>
             </li>
           );
+        } else{
+          return;
         }
-      }));
+        
+      });
     }
   }
 

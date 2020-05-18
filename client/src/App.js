@@ -7,9 +7,10 @@ import RenderList from './RenderList';
 
 function App() {
   // const [newTodo, setNewTodo] = useState('Add todo');
-  const [newList, setNewList] = useState('New list');
+  const [newList, setNewList] = useState('');
   const [allLists, setAllLists] = useState(null);
   const [allItems, setAllItems] = useState(null);
+  const [invalidListName, setInvalidListName] = useState(false);
 
   useEffect(() => {
     axios
@@ -37,30 +38,40 @@ function App() {
 
   function addTodo(e, id, newTodo) {
     e.preventDefault();
-    newTodo.listId = id; 
+    newTodo.listId = id;
     console.log('Create todo in list id ', id, newTodo);
-    axios.post('/items', newTodo)
-    .then(res => {
-      console.log(res.data);
-      setAllItems([...allItems, res.data]);
-
-    })
+    axios
+      .post('/items', newTodo)
+      .then((res) => {
+        console.log(res.data);
+        setAllItems([...allItems, res.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function createNewList(e) {
     e.preventDefault();
     console.log(newList);
-
-    axios
-      .post('/lists', { name: newList })
-      .then((res) => {
-        console.log(res.data);
-        setAllLists([...allLists, res.data]);
-        setNewList('');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(newList.name > 1){
+      axios
+          .post('/lists', { name: newList })
+          .then((res) => {
+            console.log(res.data);
+            setAllLists([...allLists, res.data]);
+            setNewList('');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    } else{
+      setInvalidListName(true);
+      setTimeout(() => {
+        setInvalidListName(false);
+      }, 2500);
+    }
+  
   }
 
   function deleteList(e, id) {
@@ -97,7 +108,6 @@ function App() {
       });
   }
 
-  
   // function changeListName(e) {
   //   e.preventDefault();
   //   console.log(newList);
@@ -117,14 +127,18 @@ function App() {
 
         <section className='listContainer'>
           Create a new list
-          <form>
+          <label>
+            Name on new list:
             <input
+              minLength='1'
               type='text'
+              placeholder='Name the list'
               value={newList}
               onChange={(e) => setNewList(e.target.value)}
             />
-            <button onClick={(e) => createNewList(e)}>Add new list</button>
-          </form>
+          </label>
+          <button onClick={(e) => createNewList(e)}>Add new list</button>
+          {invalidListName && <p>List must have a name</p>}
         </section>
       </main>
     </div>

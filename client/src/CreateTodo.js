@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 
 export default function CreateTodo({ listId, addTodo }) {
   const [newTodo, setNewTodo] = useState({
-    name: 'name',
-    description: 'description',
+    name: '',
+    description: '',
   });
+  const [invalidTodo, setInvalidTodo] = useState(false);
+
   function handleInputChange(e) {
     const target = e.target;
     const value = target.value;
@@ -12,23 +14,52 @@ export default function CreateTodo({ listId, addTodo }) {
     setNewTodo({ ...newTodo, [name]: value });
   }
 
+  function submitTodo(e) {
+    e.preventDefault();
+    if (newTodo.name > 1) {
+      addTodo(e, listId, newTodo);
+
+      setTimeout(() => {
+        setNewTodo({
+          name: '',
+          description: '',
+        });
+      }, 500);
+    } else {
+      setInvalidTodo(true);
+      setTimeout(() => {
+        setInvalidTodo(false);
+      }, 2500);
+    }
+  }
+
   return (
-    <form onClick={(e) => addTodo(e, listId, newTodo)}>
-      <input
-        id={`name_${listId}`}
-        type='text'
-        name='name'
-        value={newTodo.name}
-        onChange={handleInputChange}
-      />
-      <input
-        id={`description_${listId}`}
-        type='text'
-        name='description'
-        value={newTodo.description}
-        onChange={handleInputChange}
-      />
-      <button>Add todo</button>
+    <form>
+      <label>
+        Name:
+        <input
+          minLength='1'
+          id={`name_${listId}`}
+          type='text'
+          name='name'
+          placeholder='Name'
+          value={newTodo.name}
+          onChange={handleInputChange}
+        />
+      </label>
+      <label>
+        Description:
+        <input
+          id={`description_${listId}`}
+          type='text'
+          name='description'
+          placeholder='Description'
+          value={newTodo.description}
+          onChange={handleInputChange}
+        />
+      </label>
+      <button onClick={(e) => submitTodo(e)}>Add todo</button>
+      {invalidTodo && <p>Todo can't be empty</p>}
     </form>
   );
 }

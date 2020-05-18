@@ -92,7 +92,7 @@ itemRouter.post('/', (req, res) => {
     console.log('req is ', req.body);
   let isValid = removeBlankSpace(data);
     console.log(isValid.length);
-  if (isValid.length < 2) {
+  if (isValid.length < 1) {
     res.status(406).end();
     return;
   }
@@ -153,6 +153,7 @@ listRouter.get('/:id', (req, res) => {
 });
 
 function removeBlankSpace(data) {
+  console.log('I AM ', data);
   let removeWhiteSpace = data.name.trim();
   return removeWhiteSpace;
 }
@@ -162,7 +163,7 @@ listRouter.post('/', (req, res) => {
   //   console.log('req is ', req.body);
   let isValid = removeBlankSpace(data);
   //   console.log(isValid.length);
-  if (isValid.length < 2) {
+  if (isValid.length < 1) {
     res.status(406).end();
     return;
   }
