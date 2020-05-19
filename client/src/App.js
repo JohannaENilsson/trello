@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import './App.css';
+import './style/style.scss';
 
 import RenderList from './RenderList';
 
@@ -115,7 +115,7 @@ function App() {
 
   return (
     <div className='App'>
-      <header>Organize</header>
+      <header><h1>Organize</h1></header>
       <main className='board'>
         <RenderList
           allLists={allLists}
@@ -126,7 +126,7 @@ function App() {
         />
 
         <section className='listContainer'>
-          Create a new list
+          <h2>Create a new list</h2>
           <label>
             Name on new list:
             <input

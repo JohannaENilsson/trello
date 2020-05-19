@@ -183,6 +183,12 @@ listRouter.post('/', (req, res) => {
   res.status(201).send(data);
 });
 
+function deleteListAllItems(listId){
+  items = items.filter((item) => {
+    return item.listId !== listId;
+  });
+}
+
 // Om en lista raderas måste itemsen som är kopplade till listan raderas *******
 listRouter.delete('/:id', (req, res) => {
   let id = parseInt(req.params.id);
@@ -201,6 +207,7 @@ listRouter.delete('/:id', (req, res) => {
   });
 
   if (isRemoved) {
+    deleteListAllItems(id);
     res.status(204).end();
   } else {
     res.status(404).end();

@@ -1,0 +1,64 @@
+body{
+    font-family: monospace;
+  }
+  
+  input, button {
+    font-family: monospace;
+  }
+  
+  main{
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
+  
+  .listContainer{
+    background-color: lightslategray;
+    margin: 3% 0;
+    padding: 1%;
+    box-sizing: border-box;
+    width: 250px;
+    min-height: 150px;
+    border-radius: 7px;
+  
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    input{
+      margin: 5px 0;
+    }
+
+    button{
+      border-radius: 2px;
+      border: 0.5px solid gray;
+    }
+  }
+  
+  .message{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bolder;
+    color: red;
+  }
+
+  ul{
+    list-style: none;
+    margin: 0;
+    padding-inline-start: 0;
+  }
+  
+  li{
+    margin: 7px;
+    background-color: plum;
+    border-radius: 3px;
+
+    button{
+      position: relative;
+      right: 0;
+    }
+  }

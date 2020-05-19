@@ -34,7 +34,7 @@ export default function CreateTodo({ listId, addTodo }) {
   }
 
   return (
-    <form>
+    <>
       <label>
         Name:
         <input
@@ -60,6 +60,6 @@ export default function CreateTodo({ listId, addTodo }) {
       </label>
       <button onClick={(e) => submitTodo(e)}>Add todo</button>
       {invalidTodo && <p>Todo can't be empty</p>}
-    </form>
+    </>
   );
 }

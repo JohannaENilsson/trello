@@ -58,7 +58,7 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
       let item = renderItems(list.id);
       return (
         <section className='listContainer' key={list.id}>
-          {list.name}
+          <h2>{list.name}</h2>
           <button onClick={(e) => deleteList(e, list.id)}>X</button>
           {/* <form>
             <input

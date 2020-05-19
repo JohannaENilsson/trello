@@ -4,5 +4,6 @@
   "main": "index.js",
   "repository": "git@github.com:JohannaENilsson/mandatory-trello.git",
   "author": "Johanna Nilsson <nijodotcom@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }
