@@ -108,6 +108,30 @@ function App() {
       });
   }
 
+  function updateItem(id, item){
+    console.log(id, item);
+    axios.patch(`/items/${id}`, item)
+    .then(res => {
+      console.log(res.data);
+
+      let itemIndex = allItems.findIndex(function (item) {
+        return item.id === id;
+      });
+
+      // ** 
+      setAllItems([...allItems, ...allItems[itemIndex] = res.data]);
+      
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  console.log(allItems);
+
+  
+  
+
   // function changeListName(e) {
   //   e.preventDefault();
   //   console.log(newList);
@@ -123,6 +147,7 @@ function App() {
           allItems={allItems}
           deleteItem={deleteItem}
           addTodo={addTodo}
+          updateItem={updateItem}
         />
 
         <section className='listContainer'>

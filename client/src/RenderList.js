@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import CreateTodo from './CreateTodo';
+import ItemPopup from './ItemPopup';
 
-function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
+function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updateItem }) {
+  const [showPopup, setShowPopup] = useState(false);
+  const [item, setItem] = useState(null);
   // const [newList, setNewList] = useState('New list');
   // const [newListName, setNewListName] = useState('List name');
 
@@ -16,6 +19,12 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
   //   console.log(newList);
   // }
 
+  function handleItemPopup(item) {
+    console.log(item);
+    setShowPopup(true);
+    setItem(item);
+  }
+  console.log(showPopup);
   function renderItems(listId) {
     if (!allItems) {
       return <p>Loading...</p>;
@@ -27,15 +36,15 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
         if (listId === item.listId) {
           return (
             <li key={item.id}>
-              <span>{item.name}</span>
+              <span onClick={() => handleItemPopup(item)}>{item.name}</span>
               <button onClick={(e) => deleteItem(e, item.id)}>X</button>
-              <p>{item.description}</p>
+
+              {/* <p>{item.description}</p> */}
             </li>
           );
-        } else{
+        } else {
           return;
         }
-        
       });
     }
   }
@@ -76,7 +85,12 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo }) {
     });
   }
 
-  return <>{listInfo}</>;
+  return (
+    <>
+      {listInfo}
+      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem}/> : null}
+    </>
+  );
 }
 
 export default RenderList;

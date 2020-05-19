@@ -79,26 +79,50 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // ITEM ********************************************************************** */
 let itemRouter = express.Router();
 itemRouter.get('/', (req, res) => {
   res.status(200).send(items);
 });
 
-function timeStamp(){
+function timeStamp() {
   let date = new Date();
   let theDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   console.log('the date IS ', theDate);
   return theDate;
 }
 
+itemRouter.patch('/:id', (req, res) => {
+  let id = parseInt(req.params.id);
+  let data = req.body;
+  console.log('req data is ', data);
+  console.log('req ID is ', id);
+
+  let itemIndex = items.findIndex(function (item) {
+    return item.id === id;
+  });
+  console.log('The item is here? ', itemIndex);
+
+  if (itemIndex === -1) {
+    res.status(400).end();
+    return;
+  }
+
+  items[itemIndex] = {
+    ...items[itemIndex],
+    ...data,
+  };
+
+  console.log(items[itemIndex]);
+  console.log(items);
+  res.status(200).send(items[itemIndex]);
+});
 
 itemRouter.post('/', (req, res) => {
   let data = req.body;
-    console.log('req is ', req.body);
+  console.log('req is ', req.body);
   let isValid = removeBlankSpace(data);
-    console.log(isValid.length);
+  console.log(isValid.length);
   if (isValid.length < 1) {
     res.status(406).end();
     return;
@@ -113,7 +137,6 @@ itemRouter.post('/', (req, res) => {
   items.push(data);
   res.status(201).send(data);
 });
-
 
 itemRouter.delete('/:id', (req, res) => {
   let id = parseInt(req.params.id);
@@ -183,13 +206,12 @@ listRouter.post('/', (req, res) => {
   res.status(201).send(data);
 });
 
-function deleteListAllItems(listId){
+function deleteListAllItems(listId) {
   items = items.filter((item) => {
     return item.listId !== listId;
   });
 }
 
-// Om en lista raderas måste itemsen som är kopplade till listan raderas *******
 listRouter.delete('/:id', (req, res) => {
   let id = parseInt(req.params.id);
 
