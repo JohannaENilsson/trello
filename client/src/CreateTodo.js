@@ -47,7 +47,7 @@ export default function CreateTodo({ listId, addTodo }) {
           onChange={handleInputChange}
         />
       </label>
-      <label>
+      {/* <label>
         Description:
         <input
           id={`description_${listId}`}
@@ -57,7 +57,7 @@ export default function CreateTodo({ listId, addTodo }) {
           value={newTodo.description}
           onChange={handleInputChange}
         />
-      </label>
+      </label> */}
       <button onClick={(e) => submitTodo(e)}>Add todo</button>
       {invalidTodo && <p>Todo can't be empty</p>}
     </>

@@ -5,7 +5,16 @@ export default function ItemPopup({ item, setShowPopup, updateItem }) {
   const [inputValue, setInputValue] = useState({
     name: item.name,
     description: item.description,
+    id: item.id,
   });
+
+  if (inputValue.id !== item.id) {
+    setInputValue({
+      name: item.name,
+      description: item.description,
+      id: item.id,
+    });
+  }
 
   function handleInputChange(e) {
     const target = e.target;
@@ -14,16 +23,16 @@ export default function ItemPopup({ item, setShowPopup, updateItem }) {
     setInputValue({ ...inputValue, [name]: value });
   }
 
-  function handleUpdate(){
+  function handleUpdate() {
     updateItem(item.id, inputValue);
   }
 
   return ReactDOM.createPortal(
-    <section >
-        <button onClick={() => setShowPopup(false)}>Close</button>
+    <section>
+      <button onClick={() => setShowPopup(false)}>Close</button>
       <h1>{item.name}</h1>
       <label>
-          Name: 
+        Name:
         <input
           type='text'
           name='name'
@@ -33,7 +42,8 @@ export default function ItemPopup({ item, setShowPopup, updateItem }) {
         />
       </label>
       <p>{item.description}</p>
-      <label>Description: 
+      <label>
+        Description:
         <input
           type='text'
           name='description'

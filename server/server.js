@@ -99,7 +99,7 @@ itemRouter.patch('/:id', (req, res) => {
   console.log('req ID is ', id);
 
   let itemIndex = items.findIndex(function (item) {
-    return item.id === id;
+    return item.id === `00${id}`; // Denna måste ändras sen när db är inne
   });
   console.log('The item is here? ', itemIndex);
 

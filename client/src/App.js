@@ -118,7 +118,6 @@ function App() {
         return item.id === id;
       });
  
-      // ** 
       setAllItems([...allItems.filter((x, i) => i !== itemIndex), res.data]);
       
     })
@@ -126,11 +125,6 @@ function App() {
       console.log(err);
     })
   }
-
-  console.log(allItems);
-
-  
-  
 
   // function changeListName(e) {
   //   e.preventDefault();

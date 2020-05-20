@@ -18,13 +18,18 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   //   e.preventDefault();
   //   console.log(newList);
   // }
+ 
+  // function handleCloseItemPopup() {
+  //   setShowPopup(false);
+  //   setItem(null);
+  // }
 
   function handleItemPopup(item) {
-    console.log(item);
+    console.log('Clicked on ', item);
     setShowPopup(true);
     setItem(item);
   }
-  console.log(showPopup);
+  
   function renderItems(listId) {
     if (!allItems) {
       return <p>Loading...</p>;
@@ -32,14 +37,12 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
       return <p>You have no todos</p>;
     } else {
       return allItems.map((item) => {
-        // get item som matchar list id
+        // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
           return (
             <li key={item.id}>
               <span onClick={() => handleItemPopup(item)}>{item.name}</span>
               <button onClick={(e) => deleteItem(e, item.id)}>X</button>
-
-              {/* <p>{item.description}</p> */}
             </li>
           );
         } else {
@@ -88,7 +91,8 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   return (
     <>
       {listInfo}
-      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem}/> : null}
+      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem}/> : null} 
+      {/* handleCloseItemPopup={handleCloseItemPopup} */}
     </>
   );
 }
