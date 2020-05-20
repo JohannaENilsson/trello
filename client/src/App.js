@@ -117,9 +117,9 @@ function App() {
       let itemIndex = allItems.findIndex(function (item) {
         return item.id === id;
       });
-
+ 
       // ** 
-      setAllItems([...allItems, ...allItems[itemIndex] = res.data]);
+      setAllItems([...allItems.filter((x, i) => i !== itemIndex), res.data]);
       
     })
     .catch(err => {
