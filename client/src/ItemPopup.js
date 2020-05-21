@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
-export default function ItemPopup({ item, setShowPopup, updateItem }) {
+import MoveItem from './MoveItem';
+
+export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) {
   const [inputValue, setInputValue] = useState({
     name: item.name,
     description: item.description,
     id: item.id,
   });
+  console.log('Item that was clicked on ', item);
 
   if (inputValue.id !== item.id) {
     setInputValue({
@@ -30,7 +33,7 @@ export default function ItemPopup({ item, setShowPopup, updateItem }) {
   return ReactDOM.createPortal(
     <section>
       <button onClick={() => setShowPopup(false)}>Close</button>
-      <h1>{item.name}</h1>
+      {/* <h1>{item.name}</h1> */}
       <label>
         Name:
         <input
@@ -41,7 +44,7 @@ export default function ItemPopup({ item, setShowPopup, updateItem }) {
           onChange={handleInputChange}
         />
       </label>
-      <p>{item.description}</p>
+      {/* <p>{item.description}</p> */}
       <label>
         Description:
         <input
@@ -53,6 +56,7 @@ export default function ItemPopup({ item, setShowPopup, updateItem }) {
         />
       </label>
       <p>Created: {item.time}</p>
+      <MoveItem allLists={allLists} listID={item.listId} item={item}/>
       <button onClick={handleUpdate}>Update</button>
     </section>,
 

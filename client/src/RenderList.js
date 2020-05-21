@@ -91,7 +91,7 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   return (
     <>
       {listInfo}
-      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem}/> : null} 
+      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem} allLists={allLists}/> : null} 
       {/* handleCloseItemPopup={handleCloseItemPopup} */}
     </>
   );
