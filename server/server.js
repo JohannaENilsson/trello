@@ -20,28 +20,28 @@ let lists = [
 
 let items = [
   {
-    id: 001,
+    id: 100,
     name: 'Cook food',
     description: 'make som delicious vegan food',
     time: 'create time',
     listId: 1,
   },
   {
-    id: 002,
+    id: 200,
     name: 'Watch movie',
     description: 'Se all Anthony Hopkins movies',
     time: 'create time',
     listId: 1,
   },
   {
-    id: 003,
+    id: 300,
     name: 'Pet the cat',
     description: 'Give her some love',
     time: 'create time',
     listId: 1,
   },
   {
-    id: 004,
+    id: 400,
     name: 'Code',
     description: 'Learn how to code',
     time: 'create time',
@@ -51,7 +51,7 @@ let items = [
 
 let listID = 4;
 
-let itemID = 5;
+let itemID = 500;
 
 // {listId: String, itemId :string}
 let relationListItem = [];
@@ -99,7 +99,8 @@ itemRouter.patch('/:id', (req, res) => {
   console.log('req ID is ', id);
 
   let itemIndex = items.findIndex(function (item) {
-    return item.id === `00${id}`; // Denna måste ändras sen när db är inne
+    console.log('item ID is ',item.id, 'And PARAM ID IS', id);
+    return item.id === id; 
   });
   console.log('The item is here? ', itemIndex);
 
@@ -128,7 +129,7 @@ itemRouter.post('/', (req, res) => {
     return;
   }
   let theDate = timeStamp();
-  data.id = `00${itemID}`;
+  data.id = itemID;
   data.name = isValid;
   data.time = theDate;
   data.listId = data.listId;

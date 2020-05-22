@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 import MoveItem from './MoveItem';
@@ -8,7 +8,15 @@ export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) 
     name: item.name,
     description: item.description,
     id: item.id,
+    listId: item.listId,
   });
+  const [selectValue, setSelectValue] = useState(item.listId);
+
+  console.log(selectValue);
+  useEffect(() => {
+    setSelectValue(item.listId);
+  }, [item]);
+
   console.log('Item that was clicked on ', item);
 
   if (inputValue.id !== item.id) {
@@ -16,8 +24,16 @@ export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) 
       name: item.name,
       description: item.description,
       id: item.id,
+      listId: item.listId,
     });
   }
+
+  function handleSelectValue(e){
+    setSelectValue(e.target.value)
+    setInputValue({ ...inputValue, listId: parseInt(e.target.value) });
+    console.log(inputValue);
+}
+console.log(inputValue);
 
   function handleInputChange(e) {
     const target = e.target;
@@ -56,7 +72,7 @@ export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) 
         />
       </label>
       <p>Created: {item.time}</p>
-      <MoveItem allLists={allLists} listID={item.listId} item={item}/>
+      <MoveItem allLists={allLists} listID={item.listId} item={item} selectValue={selectValue} handleSelectValue={handleSelectValue}/>
       <button onClick={handleUpdate}>Update</button>
     </section>,
 

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-export default function MoveItem({ allLists, listID, item }) {
-  const [selectValue, setSelectValue] = useState(listID);
+export default function MoveItem({ allLists, listID, item, handleSelectValue, selectValue }) {
+//   const [selectValue, setSelectValue] = useState(listID);
 
-  console.log(selectValue);
-  useEffect(() => {
-    setSelectValue(listID);
-  }, [item]);
+//   console.log(selectValue);
+//   useEffect(() => {
+//     setSelectValue(listID);
+//   }, [item]);
 
+// function HandleSelectValue(e){
+//     setSelectValue(e.target.value)
+// }
 
   return (
     <>
@@ -16,7 +19,7 @@ export default function MoveItem({ allLists, listID, item }) {
         <select
           id='move'
           value={selectValue}
-          onChange={(e) => setSelectValue(e.target.value)}
+          onChange={(e) => handleSelectValue(e)}
         >
           {allLists.map((list) => {
             return (
