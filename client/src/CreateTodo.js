@@ -34,7 +34,7 @@ export default function CreateTodo({ listId, addTodo }) {
   }
 
   return (
-    <>
+    <><form onSubmit={(e) => submitTodo(e)}>
       <label htmlFor={`name_${listId}`}>
         New todo
         </label>
@@ -59,8 +59,9 @@ export default function CreateTodo({ listId, addTodo }) {
           onChange={handleInputChange}
         />
       </label> */}
-      <button onClick={(e) => submitTodo(e)} className="material-icons"><span>add_circle</span></button>
+      <button type='submit' className="material-icons"><span>add_circle</span></button>
       {invalidTodo && <p>Todo can't be empty</p>}
+      </form>
     </>
   );
 }

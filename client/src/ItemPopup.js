@@ -46,8 +46,10 @@ export default function ItemPopup({
     setInputValue({ ...inputValue, [name]: value });
   }
 
-  function handleUpdate() {
-    updateItem(item.id, inputValue);
+  function handleUpdate(e) {
+    console.log('do i happen?');
+    e.preventDefault();
+    updateItem(e, item.id, inputValue);
     setShowPopup(false);
   }
 
@@ -58,14 +60,14 @@ export default function ItemPopup({
 
   return ReactDOM.createPortal(
     <div className='popUpBackground' role='dialog'>
-      <section className='popUpContainer'>
-        <button
-          onClick={() => setShowPopup(false)}
-          className='material-icons close'
-        >
-          <span>cancel</span>
-        </button>
-        
+          <form onSubmit={(e) => handleUpdate(e)} className='popUpContainer'>
+          <button
+            onClick={() => setShowPopup(false)}
+            className='material-icons close'
+          >
+            <span>cancel</span>
+          </button>
+
           <label htmlFor='name'>Todo:</label>
           <input
             type='text'
@@ -96,12 +98,11 @@ export default function ItemPopup({
             <button onClick={(e) => handleDelete(e)} className='material-icons'>
               <span>delete</span>
             </button>
-            <button onClick={handleUpdate} className='material-icons'>
+            <button type='submit' className='material-icons'>
               <span>check_circle</span>
             </button>
           </div>
-
-      </section>
+        </form>
     </div>,
 
     document.body

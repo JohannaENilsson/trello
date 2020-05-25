@@ -117,7 +117,8 @@ function App() {
       });
   }
 
-  function updateItem(id, item){
+  function updateItem(e, id, item){
+    e.preventDefault();
     console.log(id, item);
     axios.patch(`/items/${id}`, item)
     .then(res => {

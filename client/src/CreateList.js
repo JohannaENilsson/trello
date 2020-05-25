@@ -6,6 +6,7 @@ export default function CreateList({setNewList, createNewList, invalidListName, 
 
         <section className='listContainer'>
           <h2>New list</h2>
+          <form onSubmit={(e) => createNewList(e)}>
           <label htmlFor='list'>
             Name on new list:
             </label>
@@ -18,9 +19,10 @@ export default function CreateList({setNewList, createNewList, invalidListName, 
               onChange={(e) => setNewList(e.target.value)}
             />
           
-          <button onClick={(e) => createNewList(e)} className="material-icons"><span>add_circle</span></button>
+          <button type='submit' className="material-icons"><span>add_circle</span></button>
           {invalidListName && <p>List must have a name</p>}
           {invalidListAmount && <p>too many list! create a new board</p>}
+          </form>
         </section>
 
     );
