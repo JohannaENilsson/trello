@@ -48,56 +48,60 @@ export default function ItemPopup({
 
   function handleUpdate() {
     updateItem(item.id, inputValue);
+    setShowPopup(false);
+  }
+
+  function handleDelete(e) {
+    deleteItem(e, item.id);
+    setShowPopup(false);
   }
 
   return ReactDOM.createPortal(
-    <div className='popUpBackground' role="dialog">
-    <section className='popUpContainer'>
-      <button onClick={() => setShowPopup(false)} className='material-icons close'><span>
-        cancel</span>
-      </button>
+    <div className='popUpBackground' role='dialog'>
+      <section className='popUpContainer'>
+        <button
+          onClick={() => setShowPopup(false)}
+          className='material-icons close'
+        >
+          <span>cancel</span>
+        </button>
+        
+          <label htmlFor='name'>Todo:</label>
+          <input
+            type='text'
+            name='name'
+            id='name'
+            placeholder={item.name}
+            value={inputValue.name}
+            onChange={handleInputChange}
+          />
 
-      
-      <label htmlFor='name'>Todo:</label>
-      <input
-        type='text'
-        name='name'
-        id='name'
-        placeholder={item.name}
-        value={inputValue.name}
-        onChange={handleInputChange}
-      />
+          <label htmlFor='description'>Description:</label>
+          <input
+            type='text'
+            name='description'
+            id='description'
+            placeholder={item.description}
+            value={inputValue.description}
+            onChange={handleInputChange}
+          />
 
-      <label htmlFor='description'>Description:</label>
-      <input
-        type='text'
-        name='description'
-        id='description'
-        placeholder={item.description}
-        value={inputValue.description}
-        onChange={handleInputChange}
-      />
+          <p>Created: {item.time}</p>
+          <MoveItem
+            allLists={allLists}
+            selectValue={selectValue}
+            handleSelectValue={handleSelectValue}
+          />
+          <div role='group'>
+            <button onClick={(e) => handleDelete(e)} className='material-icons'>
+              <span>delete</span>
+            </button>
+            <button onClick={handleUpdate} className='material-icons'>
+              <span>check_circle</span>
+            </button>
+          </div>
 
-      <p>Created: {item.time}</p>
-      <MoveItem
-        allLists={allLists}
-        listID={item.listId}
-        item={item}
-        selectValue={selectValue}
-        handleSelectValue={handleSelectValue}
-      />
-      <div role="group">
-      <button
-        onClick={(e) => deleteItem(e, item.id)}
-        className='material-icons'
-      ><span>
-        delete</span>
-      </button>
-      <button onClick={handleUpdate} className='material-icons'><span>
-        check_circle</span>
-      </button>
-      </div>
-    </section>
+      </section>
     </div>,
 
     document.body

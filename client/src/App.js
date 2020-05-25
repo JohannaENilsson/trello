@@ -14,6 +14,7 @@ function App() {
   const [allLists, setAllLists] = useState(null);
   const [allItems, setAllItems] = useState(null);
   const [invalidListName, setInvalidListName] = useState(false);
+  const [invalidListAmount, setInvalidListAmount] = useState(false);
 
   useEffect(() => {
     axios
@@ -57,7 +58,12 @@ function App() {
   function createNewList(e) {
     e.preventDefault();
     console.log(newList);
-    if(newList.length > 0){
+    if(allLists.length === 5 ){
+      setInvalidListAmount(true);
+      setTimeout(() => {
+        setInvalidListAmount(false);
+      }, 2500);
+    } else if(newList.length > 0){
       axios
           .post('/lists', { name: newList })
           .then((res) => {
@@ -146,7 +152,7 @@ function App() {
           addTodo={addTodo}
           updateItem={updateItem}
         />
-        <CreateList setNewList={setNewList} createNewList={createNewList} invalidListName={invalidListName} newList={newList}/>
+        <CreateList setNewList={setNewList} createNewList={createNewList} invalidListName={invalidListName} newList={newList} invalidListAmount={invalidListAmount}/>
 
       </main>
 

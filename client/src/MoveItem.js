@@ -1,16 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-export default function MoveItem({ allLists, listID, item, handleSelectValue, selectValue }) {
-//   const [selectValue, setSelectValue] = useState(listID);
-
-//   console.log(selectValue);
-//   useEffect(() => {
-//     setSelectValue(listID);
-//   }, [item]);
-
-// function HandleSelectValue(e){
-//     setSelectValue(e.target.value)
-// }
+export default function MoveItem({ allLists, handleSelectValue, selectValue }) {
 
   return (
     <>

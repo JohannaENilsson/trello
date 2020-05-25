@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default function CreateList({setNewList, createNewList, invalidListName, newList}){
+export default function CreateList({setNewList, createNewList, invalidListName, newList, invalidListAmount}){
 
     return(
 
         <section className='listContainer'>
-          <h2>Create a new list</h2>
+          <h2>New list</h2>
           <label htmlFor='list'>
             Name on new list:
             </label>
@@ -20,6 +20,7 @@ export default function CreateList({setNewList, createNewList, invalidListName, 
           
           <button onClick={(e) => createNewList(e)} className="material-icons"><span>add_circle</span></button>
           {invalidListName && <p>List must have a name</p>}
+          {invalidListAmount && <p>too many list! create a new board</p>}
         </section>
 
     );
