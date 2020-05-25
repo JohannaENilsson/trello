@@ -25,7 +25,6 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   // }
 
   function handleItemPopup(item) {
-    console.log('Clicked on ', item);
     setShowPopup(true);
     setItem(item);
   }
@@ -40,9 +39,9 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
         // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
           return (
-            <li key={item.id}>
-              <span onClick={() => handleItemPopup(item)}>{item.name}</span>
-              <button onClick={(e) => deleteItem(e, item.id)}>X</button>
+            <li key={item.id} className='itemContainer' onClick={() => handleItemPopup(item)}>
+              <span >{item.name}</span>
+              <button className="material-icons"><span>edit</span></button>
             </li>
           );
         } else {
@@ -71,7 +70,7 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
       return (
         <section className='listContainer' key={list.id}>
           <h2>{list.name}</h2>
-          <button onClick={(e) => deleteList(e, list.id)}>X</button>
+          <button onClick={(e) => deleteList(e, list.id)} className="material-icons"><span>delete</span></button>
           {/* <form>
             <input
               type='text'
@@ -91,7 +90,7 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   return (
     <>
       {listInfo}
-      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem} allLists={allLists}/> : null} 
+      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem} allLists={allLists} deleteItem={deleteItem}/> : null} 
       {/* handleCloseItemPopup={handleCloseItemPopup} */}
     </>
   );

@@ -3,7 +3,13 @@ import ReactDOM from 'react-dom';
 
 import MoveItem from './MoveItem';
 
-export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) {
+export default function ItemPopup({
+  item,
+  setShowPopup,
+  updateItem,
+  allLists,
+  deleteItem,
+}) {
   const [inputValue, setInputValue] = useState({
     name: item.name,
     description: item.description,
@@ -17,8 +23,6 @@ export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) 
     setSelectValue(item.listId);
   }, [item]);
 
-  console.log('Item that was clicked on ', item);
-
   if (inputValue.id !== item.id) {
     setInputValue({
       name: item.name,
@@ -28,12 +32,12 @@ export default function ItemPopup({ item, setShowPopup, updateItem, allLists }) 
     });
   }
 
-  function handleSelectValue(e){
-    setSelectValue(e.target.value)
+  function handleSelectValue(e) {
+    setSelectValue(e.target.value);
     setInputValue({ ...inputValue, listId: parseInt(e.target.value) });
     console.log(inputValue);
-}
-console.log(inputValue);
+  }
+  console.log(inputValue);
 
   function handleInputChange(e) {
     const target = e.target;
@@ -47,34 +51,54 @@ console.log(inputValue);
   }
 
   return ReactDOM.createPortal(
-    <section>
-      <button onClick={() => setShowPopup(false)}>Close</button>
-      {/* <h1>{item.name}</h1> */}
-      <label>
-        Name:
-        <input
-          type='text'
-          name='name'
-          placeholder={item.name}
-          value={inputValue.name}
-          onChange={handleInputChange}
-        />
-      </label>
-      {/* <p>{item.description}</p> */}
-      <label>
-        Description:
-        <input
-          type='text'
-          name='description'
-          placeholder={item.description}
-          value={inputValue.description}
-          onChange={handleInputChange}
-        />
-      </label>
+    <div className='popUpBackground' role="dialog">
+    <section className='popUpContainer'>
+      <button onClick={() => setShowPopup(false)} className='material-icons close'><span>
+        cancel</span>
+      </button>
+
+      
+      <label htmlFor='name'>Todo:</label>
+      <input
+        type='text'
+        name='name'
+        id='name'
+        placeholder={item.name}
+        value={inputValue.name}
+        onChange={handleInputChange}
+      />
+
+      <label htmlFor='description'>Description:</label>
+      <input
+        type='text'
+        name='description'
+        id='description'
+        placeholder={item.description}
+        value={inputValue.description}
+        onChange={handleInputChange}
+      />
+
       <p>Created: {item.time}</p>
-      <MoveItem allLists={allLists} listID={item.listId} item={item} selectValue={selectValue} handleSelectValue={handleSelectValue}/>
-      <button onClick={handleUpdate}>Update</button>
-    </section>,
+      <MoveItem
+        allLists={allLists}
+        listID={item.listId}
+        item={item}
+        selectValue={selectValue}
+        handleSelectValue={handleSelectValue}
+      />
+      <div role="group">
+      <button
+        onClick={(e) => deleteItem(e, item.id)}
+        className='material-icons'
+      ><span>
+        delete</span>
+      </button>
+      <button onClick={handleUpdate} className='material-icons'><span>
+        check_circle</span>
+      </button>
+      </div>
+    </section>
+    </div>,
 
     document.body
   );

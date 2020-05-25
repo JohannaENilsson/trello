@@ -1,64 +1,265 @@
-body{
+@import 'color';
+
+body {
+  font-family: monospace;
+  background-color: $backgroundColor;
+
+  input,
+  button {
     font-family: monospace;
   }
-  
-  input, button {
-    font-family: monospace;
+}
+
+.board {
+  // rör ej
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+}
+
+main {
+  height: 90%; // rör ej
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  background-color: $backgroundColor;
+}
+
+header {
+  height: 90px;
+  background-color: $containerColor;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  h1 {
+    margin: 0;
   }
-  
-  main{
-    display: flex;
-    flex-direction: row-reverse;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: flex-start;
+}
+
+footer {
+  height: 30px;
+  line-height: 30px;
+  background-color: $containerColor;
+  text-align: center;
+
+  p{
+    margin-block-end: 0;
+    margin-block-start: 0;
   }
-  
-  .listContainer{
-    background-color: lightslategray;
-    margin: 3% 0;
-    padding: 1%;
+}
+
+.listContainer {
+  border: 10px dotted $complementary;
+  // background-color: $activeColor;
+  margin: 3% 0;
+  padding: 1%;
+  box-sizing: border-box;
+  width: 250px;
+  min-height: 150px;
+  border-radius: 7px;
+
+  h2 {
+    display: inline-block;
+    margin-right: 5px;
+    width: 160px;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    margin: 5px 0;
+    background-color: $sec;
+    padding-left: 8px;
+    width: 160px;
+    &:focus,
+    &:hover {
+      background-color: $activeColor;
+    }
+    &:active {
+      background-color: $itemColor;
+    }
+  }
+
+  button {
+    cursor: pointer;
+    position: relative;
+    background-color: $backgroundColor;
+    border: none;
+
+    color: $containerColor;
+    outline: none;
+    &:focus,
+    &:hover {
+      color: $activeColor;
+    }
+    &:active {
+      color: $itemColor;
+    }
+  }
+
+  .material-icons span {
+    position: absolute;
+    bottom: -6px;
+    width: 0;
+  }
+}
+
+.itemContainer {
+  cursor: pointer;
+  background-color: $itemColor;
+  height: 25px;
+  border-radius: 3px;
+
+  display: flex;
+  justify-content: space-between;
+
+  margin: 7px 0;
+  line-height: 25px;
+
+  span {
+    padding-left: 8px;
+  }
+
+  button {
+    background-color: $itemColor;
+    right: 0px;
+    color: $containerColor;
+
+    &:focus,
+    &:hover {
+      color: $activeColor;
+    }
+    &:active {
+      color: $itemColor;
+    }
+  }
+
+  .material-icons span {
+    bottom: 0;
+    left: -22px;
+  }
+}
+
+.message {
+  // vid fel
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  color: red;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding-inline-start: 0;
+}
+
+label {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.popUpBackground {
+  height: 100vh;
+  width: 100%;
+  background-color: transparentize($backgroundColor, 0.5);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  .popUpContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -150px;
+
     box-sizing: border-box;
-    width: 250px;
-    min-height: 150px;
+    background-color: $complementary;
+
+    // border: 10px dotted $sec;
     border-radius: 7px;
-  
-  
+    height: 300px;
+    width: 300px;
+
+    padding: 2% 2% 1% 2%;
     display: flex;
     flex-direction: column;
-    justify-content: start;
-
-    input{
-      margin: 5px 0;
-    }
-
-    button{
-      border-radius: 2px;
-      border: 0.5px solid gray;
-    }
-  }
-  
-  .message{
-    display: flex;
+    justify-content: space-around;
     align-items: center;
-    justify-content: center;
-    font-weight: bolder;
-    color: red;
-  }
 
-  ul{
-    list-style: none;
-    margin: 0;
-    padding-inline-start: 0;
-  }
-  
-  li{
-    margin: 7px;
-    background-color: plum;
-    border-radius: 3px;
+    div {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      width: 160px;
+    }
 
-    button{
-      position: relative;
+    input {
+      margin: 10px 0;
+      border: none;
+      background-color: $sec;
+      padding-left: 8px;
+      width: 160px;
+      &:focus,
+      &:hover {
+        background-color: $itemColor;
+      }
+      &:active {
+        background-color: $activeColor;
+      }
+    }
+    select {
+      cursor: pointer;
+      width: 160px;
+      margin: 5px 0;
+      border: none;
+      background-color: $sec;
+      outline: none;
+
+      &:focus,
+      &:hover {
+        background-color: $itemColor;
+      }
+      &:active {
+        background-color: $activeColor;
+      }
+    }
+    .close {
+      position: absolute;
+      top: 10px;
       right: 0;
+      font-size: 24px;
+    }
+    button {
+      cursor: pointer;
+      position: relative;
+      background-color: $complementary;
+      border: none;
+      width: 50px;
+      font-size: 50px;
+      color: $containerColor;
+      outline: none;
+      &:focus,
+      &:hover {
+        color: $itemColor;
+      }
+      &:active {
+        color: $activeColor;
+      }
     }
   }
+}

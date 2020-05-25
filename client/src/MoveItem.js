@@ -16,6 +16,7 @@ export default function MoveItem({ allLists, listID, item, handleSelectValue, se
     <>
       <label htmlFor='move'>
         Move item to other list:
+        </label>
         <select
           id='move'
           value={selectValue}
@@ -29,7 +30,7 @@ export default function MoveItem({ allLists, listID, item, handleSelectValue, se
             );
           })}
         </select>
-      </label>
+      
     </>
   );
 }

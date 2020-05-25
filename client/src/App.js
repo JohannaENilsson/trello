@@ -4,6 +4,9 @@ import axios from 'axios';
 import './style/style.scss';
 
 import RenderList from './RenderList';
+import CreateList from './CreateList';
+import Header from './Header';
+import Footer from './Footer';
 
 function App() {
   // const [newTodo, setNewTodo] = useState('Add todo');
@@ -71,7 +74,7 @@ function App() {
         setInvalidListName(false);
       }, 2500);
     }
-  
+
   }
 
   function deleteList(e, id) {
@@ -117,9 +120,9 @@ function App() {
       let itemIndex = allItems.findIndex(function (item) {
         return item.id === id;
       });
- 
+
       setAllItems([...allItems.filter((x, i) => i !== itemIndex), res.data]);
-      
+
     })
     .catch(err => {
       console.log(err);
@@ -132,9 +135,9 @@ function App() {
   // }
 
   return (
-    <div className='App'>
-      <header><h1>Organize</h1></header>
-      <main className='board'>
+    <div className='board'>
+      <Header />
+      <main>
         <RenderList
           allLists={allLists}
           deleteList={deleteList}
@@ -143,23 +146,11 @@ function App() {
           addTodo={addTodo}
           updateItem={updateItem}
         />
+        <CreateList setNewList={setNewList} createNewList={createNewList} invalidListName={invalidListName} newList={newList}/>
 
-        <section className='listContainer'>
-          <h2>Create a new list</h2>
-          <label>
-            Name on new list:
-            <input
-              minLength='1'
-              type='text'
-              placeholder='Name the list'
-              value={newList}
-              onChange={(e) => setNewList(e.target.value)}
-            />
-          </label>
-          <button onClick={(e) => createNewList(e)}>Add new list</button>
-          {invalidListName && <p>List must have a name</p>}
-        </section>
       </main>
+
+      <Footer />
     </div>
   );
 }
