@@ -160,26 +160,18 @@ itemRouter.post('/', (req, res) => {
 });
 
 itemRouter.delete('/:id', (req, res) => {
-  let id = parseInt(req.params.id);
+  let id = req.params.id;
+  const db = getDB();
 
-  items = items.filter(function (item) {
-    return item.id !== id;
-  });
-
-  let isRemoved = true;
-  items.filter(function (item) {
-    if (item.id !== id) {
-      return (isRemoved = true);
-    } else {
-      return (isRemoved = false);
-    }
-  });
-
-  if (isRemoved) {
-    res.status(204).end();
-  } else {
-    res.status(404).end();
-  }
+  db.collection('items')
+    .deleteOne({ _id: createObjectId(id) })
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
 });
 
 app.use('/items', itemRouter);

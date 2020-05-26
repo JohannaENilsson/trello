@@ -14,7 +14,7 @@ export default function MoveItem({ allLists, handleSelectValue, selectValue }) {
         >
           {allLists.map((list) => {
             return (
-              <option key={list.id} value={list.id}>
+              <option key={list._id} value={list._id}>
                 {list.name}
               </option>
             );
