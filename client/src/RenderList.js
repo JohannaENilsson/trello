@@ -66,11 +66,11 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
     );
   } else {
     listInfo = allLists.map((list) => {
-      let item = renderItems(list.id);
+      let item = renderItems(list._id);
       return (
-        <section className='listContainer' key={list.id}>
+        <section className='listContainer' key={list._id}>
           <h2>{list.name}</h2>
-          <button onClick={(e) => deleteList(e, list.id)} className="material-icons"><span>delete</span></button>
+          <button onClick={(e) => deleteList(e, list._id)} className="material-icons"><span>delete</span></button>
           {/* <form>
             <input
               type='text'
@@ -81,7 +81,7 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
           </form> */}
 
           <ul>{item}</ul>
-          {<CreateTodo listId={list.id} addTodo={addTodo} />}
+          {<CreateTodo listId={list._id} addTodo={addTodo} />}
         </section>
       );
     });

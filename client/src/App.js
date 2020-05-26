@@ -91,7 +91,7 @@ function App() {
       .then((res) => {
         console.log(res);
         let theNewList = allLists.filter((x) => {
-          return x.id !== id;
+          return x._id !== id;
         });
         setAllLists(theNewList);
       })

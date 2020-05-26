@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const { getClient, getDB, createObjectId } = require('./db');
+
 // Board -> collection -> board
 // list -> obj {name: listName, items: [{title: str, description: str, created: date}]}
 // item -> obj {title: str, description: str, created: date, listId:}
@@ -167,7 +169,18 @@ app.use('/items', itemRouter);
 // LIST ********************************************************************** */
 let listRouter = express.Router();
 listRouter.get('/', (req, res) => {
-  res.status(200).send(lists);
+  const db = getDB();
+  db.collection('lists')
+    .find({})
+    .toArray()
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
+  // res.status(200).send(lists);
 });
 
 listRouter.get('/:id', (req, res) => {
@@ -192,19 +205,28 @@ function removeBlankSpace(data) {
 
 listRouter.post('/', (req, res) => {
   let data = req.body;
-  //   console.log('req is ', req.body);
+  const db = getDB();
+
   let isValid = removeBlankSpace(data);
+  data.name = isValid;
   //   console.log(isValid.length);
   if (isValid.length < 1) {
-    res.status(406).end();
+    res.status(400).end();
     return;
   }
-  data.id = listID;
-  data.name = isValid;
-
-  listID++;
-  lists.push(data);
-  res.status(201).send(data);
+  
+  db.collection('lists')
+    .insertOne(data)
+    .then((result) => {
+      data._id = result.insertedId;
+      
+      console.log('from THEN ', data);
+      res.status(201).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
 });
 
 function deleteListAllItems(listId) {
@@ -214,27 +236,39 @@ function deleteListAllItems(listId) {
 }
 
 listRouter.delete('/:id', (req, res) => {
-  let id = parseInt(req.params.id);
+  let id = req.params.id;
+  const db = getDB();
 
-  lists = lists.filter(function (list) {
-    return list.id !== id;
-  });
+  db.collection('lists')
+    .deleteOne({ _id: createObjectId(id) })
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
 
-  let isRemoved = true;
-  lists.filter(function (list) {
-    if (list.id !== id) {
-      return (isRemoved = true);
-    } else {
-      return (isRemoved = false);
-    }
-  });
+    // TÖM ITEMS FRÅN LISTA!!!!
+  // lists = lists.filter(function (list) {
+  //   return list.id !== id;
+  // });
 
-  if (isRemoved) {
-    deleteListAllItems(id);
-    res.status(204).end();
-  } else {
-    res.status(404).end();
-  }
+  // let isRemoved = true;
+  // lists.filter(function (list) {
+  //   if (list.id !== id) {
+  //     return (isRemoved = true);
+  //   } else {
+  //     return (isRemoved = false);
+  //   }
+  // });
+
+  // if (isRemoved) {
+  //   deleteListAllItems(id);
+  //   res.status(204).end();
+  // } else {
+  //   res.status(404).end();
+  // }
 });
 // listRouter.patch('/board/:id', (req, res) => {}); // ********* EXTRA UPPDATERA NAMNET
 
