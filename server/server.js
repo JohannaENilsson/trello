@@ -105,30 +105,65 @@ function timeStamp() {
 }
 
 itemRouter.patch('/:id', (req, res) => {
-  let id = parseInt(req.params.id);
+  // let id = parseInt(req.params.id);
+  // let data = req.body;
+  // console.log('req data is ', data);
+  // console.log('req ID is ', id);
+
+  // let itemIndex = items.findIndex(function (item) {
+  //   console.log('item ID is ',item.id, 'And PARAM ID IS', id);
+  //   return item.id === id; 
+  // });
+  // console.log('The item is here? ', itemIndex);
+
+  // if (itemIndex === -1) {
+  //   res.status(400).end();
+  //   return;
+  // }
+
+  // items[itemIndex] = {
+  //   ...items[itemIndex],
+  //   ...data,
+  // };
+
+  // console.log(items[itemIndex]);
+  // console.log(items);
+  // res.status(200).send(items[itemIndex]);
+
+  ///
+  let id = req.params.id;
   let data = req.body;
-  console.log('req data is ', data);
-  console.log('req ID is ', id);
+  const db = getDB();
+  console.log(id);
+  
+  // let isValid = removeBlankSpace(data);
 
-  let itemIndex = items.findIndex(function (item) {
-    console.log('item ID is ',item.id, 'And PARAM ID IS', id);
-    return item.id === id; 
-  });
-  console.log('The item is here? ', itemIndex);
+  // if (isValid.length < 1) {
+  //   res.status(400).end();
+  //   return;
+  // }
+  // let theDate = timeStamp();
+  // data.name = isValid;
+  // data.time = theDate;
+  // data.listId = data.listId;
 
-  if (itemIndex === -1) {
-    res.status(400).end();
-    return;
-  }
+  db.collection('items')
+    .updateOne({ _id: createObjectId(req.params.id)}, {$set: {name: data.name, description: data.description, listId: data.listId, time: data.time }})
+    .then((result) => {
 
-  items[itemIndex] = {
-    ...items[itemIndex],
-    ...data,
-  };
+          data._id = req.params.id;
+      
+      console.log('from THEN ITEMS ', data);
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
 
-  console.log(items[itemIndex]);
-  console.log(items);
-  res.status(200).send(items[itemIndex]);
+
+
+
 });
 
 itemRouter.post('/', (req, res) => {

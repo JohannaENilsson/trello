@@ -117,25 +117,25 @@ function App() {
       });
   }
 
-  function updateItem(e, id, item){
+  function updateItem(e, itemdId, item){
     e.preventDefault();
-    console.log(id, item);
-    axios.patch(`/items/${id}`, item)
+    console.log('Item to Change ', itemdId, item);
+    axios.patch(`/items/${itemdId}`, item)
     .then(res => {
-      console.log(res.data);
+      console.log('Res Item ', res.data);
 
-      let itemIndex = allItems.findIndex(function (item) {
-        return item._id === id;
-      });
+      // let itemIndex = allItems.findIndex(function (item) {
+      //   return item._id === id;
+      // });
 
-      setAllItems([...allItems.filter((x, i) => i !== itemIndex), res.data]);
+      setAllItems([...allItems.filter((x, i) => x._id !== itemdId), res.data]);
 
     })
     .catch(err => {
       console.log(err);
     })
   }
-
+console.log(allItems);
   // function changeListName(e) {
   //   e.preventDefault();
   //   console.log(newList);

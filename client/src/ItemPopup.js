@@ -11,34 +11,35 @@ export default function ItemPopup({
   deleteItem,
 }) {
   const [inputValue, setInputValue] = useState({
+    id: item._id,
     name: item.name,
     description: item.description,
-    id: item._id,
     listId: item.listId,
+    time: item.time,
   });
   const [selectValue, setSelectValue] = useState(item.listId);
 
-  console.log(selectValue);
+  // console.log('Selected listID ', selectValue);
   useEffect(() => {
     setSelectValue(item.listId);
   }, [item]);
 
   if (inputValue.id !== item._id) {
     setInputValue({
+      id: item._id,
       name: item.name,
       description: item.description,
-      id: item._id,
       listId: item.listId,
+      time: item.time,
     });
   }
 
   function handleSelectValue(e) {
     setSelectValue(e.target.value);
-    setInputValue({ ...inputValue, listId: parseInt(e.target.value) });
+    setInputValue({ ...inputValue, listId: e.target.value });
     console.log(inputValue);
   }
-  console.log(inputValue);
-
+  
   function handleInputChange(e) {
     const target = e.target;
     const value = target.value;
@@ -47,9 +48,15 @@ export default function ItemPopup({
   }
 
   function handleUpdate(e) {
-    console.log('do i happen?');
+    let data = {
+    name: inputValue.name,
+    description: inputValue.description,
+    listId: inputValue.listId,
+    time: inputValue.time,
+
+    }
     e.preventDefault();
-    updateItem(e, item._id, inputValue);
+    updateItem(e, item._id, data);
     setShowPopup(false);
   }
 

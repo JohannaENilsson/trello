@@ -41,6 +41,7 @@ function RenderList({
       return allItems.map((item) => {
         // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
+          console.log(item._id);
           return (
             <li
               key={item._id}
