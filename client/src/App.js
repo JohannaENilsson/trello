@@ -47,7 +47,7 @@ function App() {
     axios
       .post('/items', newTodo)
       .then((res) => {
-        console.log(res.data);
+        console.log('resp Add todo ', res.data);
         setAllItems([...allItems, res.data]);
       })
       .catch((err) => {
@@ -108,7 +108,7 @@ function App() {
       .then((res) => {
         console.log(res);
         let theNewItems = allItems.filter((x) => {
-          return x.id !== id;
+          return x._id !== id;
         });
         setAllItems(theNewItems);
       })
@@ -125,7 +125,7 @@ function App() {
       console.log(res.data);
 
       let itemIndex = allItems.findIndex(function (item) {
-        return item.id === id;
+        return item._id === id;
       });
 
       setAllItems([...allItems.filter((x, i) => i !== itemIndex), res.data]);

@@ -84,13 +84,23 @@ app.use((req, res, next) => {
 // ITEM ********************************************************************** */
 let itemRouter = express.Router();
 itemRouter.get('/', (req, res) => {
-  res.status(200).send(items);
+  const db = getDB();
+  db.collection('items')
+    .find({})
+    .toArray()
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
+
 });
 
 function timeStamp() {
   let date = new Date();
   let theDate = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-  console.log('the date IS ', theDate);
   return theDate;
 }
 
@@ -123,22 +133,30 @@ itemRouter.patch('/:id', (req, res) => {
 
 itemRouter.post('/', (req, res) => {
   let data = req.body;
-  console.log('req is ', req.body);
+  const db = getDB();
+  
   let isValid = removeBlankSpace(data);
-  console.log(isValid.length);
+
   if (isValid.length < 1) {
-    res.status(406).end();
+    res.status(400).end();
     return;
   }
   let theDate = timeStamp();
-  data.id = itemID;
   data.name = isValid;
   data.time = theDate;
   data.listId = data.listId;
 
-  itemID++;
-  items.push(data);
-  res.status(201).send(data);
+  db.collection('items')
+    .insertOne(data)
+    .then((result) => {
+      data._id = result.insertedId;
+      console.log('from THEN ITEMS ', data);
+      res.status(201).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
 });
 
 itemRouter.delete('/:id', (req, res) => {
@@ -180,22 +198,23 @@ listRouter.get('/', (req, res) => {
       console.error(err);
       res.status(500).end();
     });
-  // res.status(200).send(lists);
 });
 
-listRouter.get('/:id', (req, res) => {
-  let id = parseInt(req.params.id);
-  let list = lists.find(function (list) {
-    return list.id === id;
-  });
-  // Kollar så det finns någon id som matchar
-  if (list) {
-    res.status(200).send(list);
-  } else {
-    res.status(404).end();
-    return;
-  }
-});
+
+// TA BORT?***********
+// listRouter.get('/:id', (req, res) => {
+//   let id = parseInt(req.params.id);
+//   let list = lists.find(function (list) {
+//     return list.id === id;
+//   });
+//   // Kollar så det finns någon id som matchar
+//   if (list) {
+//     res.status(200).send(list);
+//   } else {
+//     res.status(404).end();
+//     return;
+//   }
+// });
 
 function removeBlankSpace(data) {
   console.log('I AM ', data);
@@ -220,7 +239,7 @@ listRouter.post('/', (req, res) => {
     .then((result) => {
       data._id = result.insertedId;
       
-      console.log('from THEN ', data);
+      console.log('from THEN LISTS ', data);
       res.status(201).send(data);
     })
     .catch((err) => {

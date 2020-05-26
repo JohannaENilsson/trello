@@ -13,7 +13,7 @@ export default function ItemPopup({
   const [inputValue, setInputValue] = useState({
     name: item.name,
     description: item.description,
-    id: item.id,
+    id: item._id,
     listId: item.listId,
   });
   const [selectValue, setSelectValue] = useState(item.listId);
@@ -23,11 +23,11 @@ export default function ItemPopup({
     setSelectValue(item.listId);
   }, [item]);
 
-  if (inputValue.id !== item.id) {
+  if (inputValue.id !== item._id) {
     setInputValue({
       name: item.name,
       description: item.description,
-      id: item.id,
+      id: item._id,
       listId: item.listId,
     });
   }
@@ -49,12 +49,12 @@ export default function ItemPopup({
   function handleUpdate(e) {
     console.log('do i happen?');
     e.preventDefault();
-    updateItem(e, item.id, inputValue);
+    updateItem(e, item._id, inputValue);
     setShowPopup(false);
   }
 
   function handleDelete(e) {
-    deleteItem(e, item.id);
+    deleteItem(e, item._id);
     setShowPopup(false);
   }
 

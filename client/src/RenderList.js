@@ -3,9 +3,17 @@ import React, { useState } from 'react';
 import CreateTodo from './CreateTodo';
 import ItemPopup from './ItemPopup';
 
-function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updateItem }) {
+function RenderList({
+  allLists,
+  deleteList,
+  allItems,
+  deleteItem,
+  addTodo,
+  updateItem,
+}) {
   const [showPopup, setShowPopup] = useState(false);
   const [item, setItem] = useState(null);
+
   // const [newList, setNewList] = useState('New list');
   // const [newListName, setNewListName] = useState('List name');
 
@@ -18,17 +26,12 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   //   e.preventDefault();
   //   console.log(newList);
   // }
- 
-  // function handleCloseItemPopup() {
-  //   setShowPopup(false);
-  //   setItem(null);
-  // }
 
   function handleItemPopup(item) {
     setShowPopup(true);
     setItem(item);
   }
-  
+
   function renderItems(listId) {
     if (!allItems) {
       return <p>Loading...</p>;
@@ -39,9 +42,15 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
         // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
           return (
-            <li key={item.id} className='itemContainer' onClick={() => handleItemPopup(item)}>
-              <span >{item.name}</span>
-              <button className="material-icons"><span>edit</span></button>
+            <li
+              key={item._id}
+              className='itemContainer'
+              onClick={() => handleItemPopup(item)}
+            >
+              <span>{item.name}</span>
+              <button className='material-icons'>
+                <span>edit</span>
+              </button>
             </li>
           );
         } else {
@@ -70,7 +79,12 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
       return (
         <section className='listContainer' key={list._id}>
           <h2>{list.name}</h2>
-          <button onClick={(e) => deleteList(e, list._id)} className="material-icons"><span>delete</span></button>
+          <button
+            onClick={(e) => deleteList(e, list._id)}
+            className='material-icons'
+          >
+            <span>delete</span>
+          </button>
           {/* <form>
             <input
               type='text'
@@ -90,8 +104,15 @@ function RenderList({ allLists, deleteList, allItems, deleteItem, addTodo, updat
   return (
     <>
       {listInfo}
-      {showPopup ? <ItemPopup item={item} setShowPopup={setShowPopup} updateItem={updateItem} allLists={allLists} deleteItem={deleteItem}/> : null} 
-      {/* handleCloseItemPopup={handleCloseItemPopup} */}
+      {showPopup ? (
+        <ItemPopup
+          item={item}
+          setShowPopup={setShowPopup}
+          updateItem={updateItem}
+          allLists={allLists}
+          deleteItem={deleteItem}
+        />
+      ) : null}
     </>
   );
 }
