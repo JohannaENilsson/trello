@@ -7,77 +7,46 @@ const { getClient, getDB, createObjectId } = require('./db');
 // list -> obj {name: listName, items: [{title: str, description: str, created: date}]}
 // item -> obj {title: str, description: str, created: date, listId:}
 
-// middleware to parse data
+// app.use(express.json());
 
-let lists = [
-  {
-    id: 1,
-    name: 'Todo',
-  },
-  {
-    id: 2,
-    name: 'Inprogress',
-  },
-];
+app.use((req, res, next) => {
+  console.log('Is req.body ', req.is('json'));
+  if (req.is('json')) {
+    let data = '';
 
-let items = [
-  {
-    id: 100,
-    name: 'Cook food',
-    description: 'make som delicious vegan food',
-    time: 'create time',
-    listId: 1,
-  },
-  {
-    id: 200,
-    name: 'Watch movie',
-    description: 'Se all Anthony Hopkins movies',
-    time: 'create time',
-    listId: 1,
-  },
-  {
-    id: 300,
-    name: 'Pet the cat',
-    description: 'Give her some love',
-    time: 'create time',
-    listId: 1,
-  },
-  {
-    id: 400,
-    name: 'Code',
-    description: 'Learn how to code',
-    time: 'create time',
-    listId: 2,
-  },
-];
+    req.on('data', (chunk) => {
+      data += chunk.toString();
+    });
 
-let listID = 4;
+    req.on('end', () => {
+      try {
+        data = JSON.parse(data);
+        req.body = data;
+        console.log('setting body:', req.body);
+        next();
+      } catch (e) {
+        res.status(400).end();
+      }
+    });
+  } else {
+    next();
+  }
+});
 
-let itemID = 500;
-
-// {listId: String, itemId :string}
-let relationListItem = [];
-
-// {boardID: string, listID: string} ???
-// Kan hämta ut dem som är kopplade till boarden och därefter itemsen som är kopplade till resp lista
-let board = [];
-
-app.use(express.json());
+// app.use((req, res, next) => {
+//   let data = req.body;
+//   if (!data) {
+//     res.status(400).end();
+//     return;
+//   }
+//   next();
+// });
 
 app.use((req, res, next) => {
   let start = new Date();
   res.once('finish', () => {
     console.log(req.method, req.path, res.statusCode, new Date() - start, 'ms');
   });
-  next();
-});
-
-app.use((req, res, next) => {
-  let data = req.body;
-  if (!data) {
-    res.status(400).end();
-    return;
-  }
   next();
 });
 
@@ -95,7 +64,6 @@ itemRouter.get('/', (req, res) => {
       console.error(err);
       res.status(500).end();
     });
-
 });
 
 function timeStamp() {
@@ -105,54 +73,33 @@ function timeStamp() {
 }
 
 itemRouter.patch('/:id', (req, res) => {
-  // let id = parseInt(req.params.id);
-  // let data = req.body;
-  // console.log('req data is ', data);
-  // console.log('req ID is ', id);
-
-  // let itemIndex = items.findIndex(function (item) {
-  //   console.log('item ID is ',item.id, 'And PARAM ID IS', id);
-  //   return item.id === id; 
-  // });
-  // console.log('The item is here? ', itemIndex);
-
-  // if (itemIndex === -1) {
-  //   res.status(400).end();
-  //   return;
-  // }
-
-  // items[itemIndex] = {
-  //   ...items[itemIndex],
-  //   ...data,
-  // };
-
-  // console.log(items[itemIndex]);
-  // console.log(items);
-  // res.status(200).send(items[itemIndex]);
-
-  ///
   let id = req.params.id;
   let data = req.body;
   const db = getDB();
   console.log(id);
-  
+
   // let isValid = removeBlankSpace(data);
 
   // if (isValid.length < 1) {
   //   res.status(400).end();
   //   return;
   // }
-  // let theDate = timeStamp();
-  // data.name = isValid;
-  // data.time = theDate;
-  // data.listId = data.listId;
 
   db.collection('items')
-    .updateOne({ _id: createObjectId(req.params.id)}, {$set: {name: data.name, description: data.description, listId: data.listId, time: data.time }})
+    .updateOne(
+      { _id: createObjectId(req.params.id) },
+      {
+        $set: {
+          name: data.name,
+          description: data.description,
+          listId: data.listId,
+          time: data.time,
+        },
+      }
+    )
     .then((result) => {
+      data._id = req.params.id;
 
-          data._id = req.params.id;
-      
       console.log('from THEN ITEMS ', data);
       res.status(200).send(data);
     })
@@ -160,16 +107,12 @@ itemRouter.patch('/:id', (req, res) => {
       console.error(err);
       res.status(500).end();
     });
-
-
-
-
 });
 
 itemRouter.post('/', (req, res) => {
   let data = req.body;
   const db = getDB();
-  
+
   let isValid = removeBlankSpace(data);
 
   if (isValid.length < 1) {
@@ -227,22 +170,6 @@ listRouter.get('/', (req, res) => {
     });
 });
 
-
-// TA BORT?***********
-// listRouter.get('/:id', (req, res) => {
-//   let id = parseInt(req.params.id);
-//   let list = lists.find(function (list) {
-//     return list.id === id;
-//   });
-//   // Kollar så det finns någon id som matchar
-//   if (list) {
-//     res.status(200).send(list);
-//   } else {
-//     res.status(404).end();
-//     return;
-//   }
-// });
-
 function removeBlankSpace(data) {
   console.log('I AM ', data);
   let removeWhiteSpace = data.name.trim();
@@ -255,17 +182,16 @@ listRouter.post('/', (req, res) => {
 
   let isValid = removeBlankSpace(data);
   data.name = isValid;
-  //   console.log(isValid.length);
   if (isValid.length < 1) {
     res.status(400).end();
     return;
   }
-  
+
   db.collection('lists')
     .insertOne(data)
     .then((result) => {
       data._id = result.insertedId;
-      
+
       console.log('from THEN LISTS ', data);
       res.status(201).send(data);
     })
@@ -295,7 +221,7 @@ listRouter.delete('/:id', (req, res) => {
       res.status(500).end();
     });
 
-    // TÖM ITEMS FRÅN LISTA!!!!
+  // TÖM ITEMS FRÅN LISTA!!!!
   // lists = lists.filter(function (list) {
   //   return list.id !== id;
   // });

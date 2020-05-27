@@ -26,6 +26,7 @@ main {
   justify-content: space-around;
   align-items: flex-start;
   background-color: $backgroundColor;
+  overflow-y: auto;
 }
 
 header {
