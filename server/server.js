@@ -78,13 +78,6 @@ itemRouter.patch('/:id', (req, res) => {
   const db = getDB();
   console.log(id);
 
-  // let isValid = removeBlankSpace(data);
-
-  // if (isValid.length < 1) {
-  //   res.status(400).end();
-  //   return;
-  // }
-
   db.collection('items')
     .updateOne(
       { _id: createObjectId(req.params.id) },
@@ -201,10 +194,12 @@ listRouter.post('/', (req, res) => {
     });
 });
 
-function deleteListAllItems(listId) {
-  items = items.filter((item) => {
-    return item.listId !== listId;
-  });
+function removeAllItemsInList(db, listID) {
+  db.collection('items')
+    .deleteMany({ listId: listID })
+    .then((data) => {
+      console.log(data.deletedCount);
+    });
 }
 
 listRouter.delete('/:id', (req, res) => {
@@ -214,33 +209,13 @@ listRouter.delete('/:id', (req, res) => {
   db.collection('lists')
     .deleteOne({ _id: createObjectId(id) })
     .then(() => {
+      removeAllItemsInList(db, id);
       res.status(204).end();
     })
     .catch((err) => {
       console.error(err);
       res.status(500).end();
     });
-
-  // TÖM ITEMS FRÅN LISTA!!!!
-  // lists = lists.filter(function (list) {
-  //   return list.id !== id;
-  // });
-
-  // let isRemoved = true;
-  // lists.filter(function (list) {
-  //   if (list.id !== id) {
-  //     return (isRemoved = true);
-  //   } else {
-  //     return (isRemoved = false);
-  //   }
-  // });
-
-  // if (isRemoved) {
-  //   deleteListAllItems(id);
-  //   res.status(204).end();
-  // } else {
-  //   res.status(404).end();
-  // }
 });
 // listRouter.patch('/board/:id', (req, res) => {}); // ********* EXTRA UPPDATERA NAMNET
 
