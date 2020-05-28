@@ -67,9 +67,13 @@ function timeStamp() {
 itemRouter.patch('/:id', (req, res) => {
   let id = req.params.id;
   let data = req.body;
+
+  if (!data) {
+    res.status(400).end();
+    return;
+  }
+
   const db = getDB();
-  console.log('Patch id is -> ', id);
-  console.log('Patch DATA is -> ', data);
 
   db.collection('items')
     .updateOne(
@@ -205,42 +209,28 @@ function removeAllItemsInList(db, listID) {
     });
 }
 
-//   // om id inte finns skicka 404
-//   let keepLooking = true;
-// lists.filter(function (list) {
-//   if (list.id !== id) {
-//     return (isRemoved = true);
-//   } else {
-//     return (isRemoved = false);
-//   }
-// });
-
 listRouter.delete('/:id', (req, res) => {
   let id = req.params.id;
   const db = getDB();
 
   db.collection('lists')
     .deleteOne({ _id: createObjectId(id) })
-    
+
     .then(() => {
       removeAllItemsInList(db, id);
-      
+
       db.collection('lists')
-      .find({ _id: createObjectId(id) })
-      .toArray()
-      .then((data) => {
-        console.log('is list removed function before if ', data);
-          if(data.length === 0){
+        .find({ _id: createObjectId(id) })
+        .toArray()
+        .then((data) => {
+          console.log('is list removed function before if ', data);
+          if (data.length === 0) {
             res.status(204).end();
           } else {
             res.status(404).end();
           }
-    })      
-      
+        });
     })
-    
-      
-    
 
     .catch((err) => {
       console.error(err);
