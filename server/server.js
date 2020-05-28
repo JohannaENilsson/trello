@@ -10,7 +10,8 @@ const { getClient, getDB, createObjectId } = require('./db');
 // app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log('Is req.body ', req.is('json'));
+  console.log('REQ IS', req.is());
+  console.log('Is req.body ', req.is('application/json'));
   if (req.is('json')) {
     let data = '';
 
@@ -32,15 +33,6 @@ app.use((req, res, next) => {
     next();
   }
 });
-
-// app.use((req, res, next) => {
-//   let data = req.body;
-//   if (!data) {
-//     res.status(400).end();
-//     return;
-//   }
-//   next();
-// });
 
 app.use((req, res, next) => {
   let start = new Date();
@@ -76,11 +68,12 @@ itemRouter.patch('/:id', (req, res) => {
   let id = req.params.id;
   let data = req.body;
   const db = getDB();
-  console.log(id);
+  console.log('Patch id is -> ', id);
+  console.log('Patch DATA is -> ', data);
 
   db.collection('items')
     .updateOne(
-      { _id: createObjectId(req.params.id) },
+      { _id: createObjectId(id) },
       {
         $set: {
           name: data.name,
@@ -104,7 +97,11 @@ itemRouter.patch('/:id', (req, res) => {
 
 itemRouter.post('/', (req, res) => {
   let data = req.body;
-  const db = getDB();
+
+  if (!data) {
+    res.status(400).end();
+    return;
+  }
 
   let isValid = removeBlankSpace(data);
 
@@ -117,6 +114,7 @@ itemRouter.post('/', (req, res) => {
   data.time = theDate;
   data.listId = data.listId;
 
+  const db = getDB();
   db.collection('items')
     .insertOne(data)
     .then((result) => {
@@ -171,15 +169,20 @@ function removeBlankSpace(data) {
 
 listRouter.post('/', (req, res) => {
   let data = req.body;
-  const db = getDB();
 
-  let isValid = removeBlankSpace(data);
-  data.name = isValid;
-  if (isValid.length < 1) {
+  if (!data) {
     res.status(400).end();
     return;
   }
 
+  let isValid = removeBlankSpace(data);
+
+  if (isValid.length < 1) {
+    res.status(400).end();
+    return;
+  }
+  data.name = isValid;
+  const db = getDB();
   db.collection('lists')
     .insertOne(data)
     .then((result) => {
@@ -202,16 +205,43 @@ function removeAllItemsInList(db, listID) {
     });
 }
 
+//   // om id inte finns skicka 404
+//   let keepLooking = true;
+// lists.filter(function (list) {
+//   if (list.id !== id) {
+//     return (isRemoved = true);
+//   } else {
+//     return (isRemoved = false);
+//   }
+// });
+
 listRouter.delete('/:id', (req, res) => {
   let id = req.params.id;
   const db = getDB();
 
   db.collection('lists')
     .deleteOne({ _id: createObjectId(id) })
+    
     .then(() => {
       removeAllItemsInList(db, id);
-      res.status(204).end();
+      
+      db.collection('lists')
+      .find({ _id: createObjectId(id) })
+      .toArray()
+      .then((data) => {
+        console.log('is list removed function before if ', data);
+          if(data.length === 0){
+            res.status(204).end();
+          } else {
+            res.status(404).end();
+          }
+    })      
+      
     })
+    
+      
+    
+
     .catch((err) => {
       console.error(err);
       res.status(500).end();
@@ -222,6 +252,7 @@ listRouter.delete('/:id', (req, res) => {
 app.use('/lists', listRouter);
 
 const PORT = 8090;
+
 app.listen(PORT, () => {
   console.log(`Connected to server at ${PORT}`);
 });
