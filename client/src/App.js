@@ -9,7 +9,6 @@ import Header from './Header';
 import Footer from './Footer';
 
 function App() {
-  // const [newTodo, setNewTodo] = useState('Add todo');
   const [newList, setNewList] = useState('');
   const [allLists, setAllLists] = useState(null);
   const [allItems, setAllItems] = useState(null);
@@ -20,7 +19,7 @@ function App() {
     axios
       .get('/lists')
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setAllLists(res.data);
       })
       .catch((err) => {
@@ -32,7 +31,7 @@ function App() {
     axios
       .get('/items')
       .then((res) => {
-        console.log('items ', res.data);
+        // console.log('items ', res.data);
         setAllItems(res.data);
       })
       .catch((err) => {
@@ -43,11 +42,11 @@ function App() {
   function addTodo(e, id, newTodo) {
     e.preventDefault();
     newTodo.listId = id;
-    console.log('Create todo in list id ', id, newTodo);
+    // console.log('Create todo in list id ', id, newTodo);
     axios
       .post('/items', newTodo)
       .then((res) => {
-        console.log('resp Add todo ', res.data);
+        // console.log('resp Add todo ', res.data);
         setAllItems([...allItems, res.data]);
       })
       .catch((err) => {
@@ -57,39 +56,38 @@ function App() {
 
   function createNewList(e) {
     e.preventDefault();
-    console.log(newList);
-    if(allLists.length === 5 ){
+    // console.log(newList);
+    if (allLists.length === 5) {
       setInvalidListAmount(true);
       setTimeout(() => {
         setInvalidListAmount(false);
       }, 2500);
-    } else if(newList.length > 0){
+    } else if (newList.length > 0) {
       axios
-          .post('/lists', { name: newList })
-          .then((res) => {
-            console.log(res.data);
-            setAllLists([...allLists, res.data]);
-            setNewList('');
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    } else{
+        .post('/lists', { name: newList })
+        .then((res) => {
+          // console.log(res.data);
+          setAllLists([...allLists, res.data]);
+          setNewList('');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
       setInvalidListName(true);
       setTimeout(() => {
         setInvalidListName(false);
       }, 2500);
     }
-
   }
 
   function deleteList(e, id) {
     e.preventDefault();
-    console.log(id);
+    // console.log(id);
     axios
       .delete(`/lists/${id}`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         let theNewList = allLists.filter((x) => {
           return x._id !== id;
         });
@@ -102,11 +100,11 @@ function App() {
 
   function deleteItem(e, id) {
     e.preventDefault();
-    console.log(id);
+    // console.log(id);
     axios
       .delete(`/items/${id}`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         let theNewItems = allItems.filter((x) => {
           return x._id !== id;
         });
@@ -117,29 +115,41 @@ function App() {
       });
   }
 
-  function updateItem(e, itemdId, item){
+  function updateItem(e, itemdId, item) {
     e.preventDefault();
-    console.log('Item to Change ', itemdId, item);
-    axios.patch(`/items/${itemdId}`, item)
-    .then(res => {
-      console.log('Res Item ', res.data);
+    // console.log('Item to Change ', itemdId, item);
+    axios
+      .patch(`/items/${itemdId}`, item)
+      .then((res) => {
+        // console.log('Res Item ', res.data);
 
-      // let itemIndex = allItems.findIndex(function (item) {
-      //   return item._id === id;
-      // });
-
-      setAllItems([...allItems.filter((x, i) => x._id !== itemdId), res.data]);
-
-    })
-    .catch(err => {
-      console.log(err);
-    })
+        setAllItems([
+          ...allItems.filter((x, i) => x._id !== itemdId),
+          res.data,
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-console.log(allItems);
-  // function changeListName(e) {
-  //   e.preventDefault();
-  //   console.log(newList);
-  // }
+
+  function changeListName(e, listId, list) {
+    e.preventDefault();
+    console.log(listId, list);
+    axios
+      .patch(`/lists/${listId}`, list)
+      .then((res) => {
+        console.log('Res List ', res.data);
+
+        setAllLists([
+          ...allLists.filter((x, i) => x._id !== listId),
+          res.data,
+        ]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <div className='board'>
@@ -152,9 +162,15 @@ console.log(allItems);
           deleteItem={deleteItem}
           addTodo={addTodo}
           updateItem={updateItem}
+          changeListName={changeListName}
         />
-        <CreateList setNewList={setNewList} createNewList={createNewList} invalidListName={invalidListName} newList={newList} invalidListAmount={invalidListAmount}/>
-
+        <CreateList
+          setNewList={setNewList}
+          createNewList={createNewList}
+          invalidListName={invalidListName}
+          newList={newList}
+          invalidListAmount={invalidListAmount}
+        />
       </main>
 
       <Footer />

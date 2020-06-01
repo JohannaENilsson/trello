@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import CreateTodo from './CreateTodo';
 import ItemPopup from './ItemPopup';
-
+import ListPopup from './ListPopup';
 
 function RenderList({
   allLists,
@@ -11,23 +11,17 @@ function RenderList({
   deleteItem,
   addTodo,
   updateItem,
+  changeListName,
 }) {
   const [showPopup, setShowPopup] = useState(false);
+  const [showListPopup, setShowListPopup] = useState(false);
   const [item, setItem] = useState(null);
-  
+  const [list, setList] = useState(null);
 
-  // const [newList, setNewList] = useState('New list');
-  // const [newListName, setNewListName] = useState('List name');
-
-  // function addTodo(e) {
-  //   e.preventDefault();
-  //   console.log(newTodo);
-  // }
-
-  // function changeListName(e) {
-  //   e.preventDefault();
-  //   console.log(newList);
-  // }
+  function handleListPopup(name) {
+    setShowListPopup(true);
+    setList(name)
+  }
 
   function handleItemPopup(item) {
     setShowPopup(true);
@@ -36,6 +30,7 @@ function RenderList({
 
   function deactivateModal() {
     setShowPopup(false);
+    setShowListPopup(false);
   }
 
   function renderItems(listId) {
@@ -47,7 +42,6 @@ function RenderList({
       return allItems.map((item) => {
         // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
-          // console.log(item._id);
           return (
             <li
               key={item._id}
@@ -83,28 +77,20 @@ function RenderList({
   } else {
     listInfo = allLists.map((list) => {
       let item = renderItems(list._id);
-     
+
       return (
         <section className='listContainer' key={list._id}>
-          <h2>{list.name}</h2>
+          <h2 onClick={() => handleListPopup(list)} style={{cursor: 'pointer'}}>{list.name}</h2>
           <button
-            onClick={(e) => deleteList(e, list._id)}
+            onClick={() => handleListPopup(list)}
             className='material-icons'
           >
-            <span>delete</span>
+            <span>edit</span>
           </button>
-          {/* <form>
-            <input
-              type='text'
-              value={newListName}
-              onChange={(e) => setNewListName(e.target.value)}
-            />
-            <button onClick={(e) => changeListName(e)}>Change name</button>
-          </form> */}
+         
 
           <ul>{item}</ul>
           {<CreateTodo listId={list._id} addTodo={addTodo} />}
-          
         </section>
       );
     });
@@ -116,14 +102,20 @@ function RenderList({
       {showPopup ? (
         <ItemPopup
           item={item}
-          setShowPopup={setShowPopup}
           updateItem={updateItem}
           allLists={allLists}
           deleteItem={deleteItem}
           deactivateModal={deactivateModal}
         />
       ) : null}
-      
+      {showListPopup ? (
+        <ListPopup
+          list={list}
+          changeListName={changeListName}
+          deleteList={deleteList}
+          deactivateModal={deactivateModal}
+        />
+      ) : null}
     </>
   );
 }

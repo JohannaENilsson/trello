@@ -13,7 +13,6 @@ export default function CreateTodo({ listId, addTodo }) {
     const name = target.name;
     setNewTodo({ ...newTodo, [name]: value });
   }
-  // console.log(listId);
 
   function submitTodo(e) {
     e.preventDefault();

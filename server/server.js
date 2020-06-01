@@ -3,15 +3,8 @@ const app = express();
 
 const { getClient, getDB, createObjectId } = require('./db');
 
-// Board -> collection -> board
-// list -> obj {name: listName, items: [{title: str, description: str, created: date}]}
-// item -> obj {title: str, description: str, created: date, listId:}
-
-// app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log('REQ IS', req.is());
-  console.log('Is req.body ', req.is('application/json'));
   if (req.is('json')) {
     let data = '';
 
@@ -23,7 +16,6 @@ app.use((req, res, next) => {
       try {
         data = JSON.parse(data);
         req.body = data;
-        console.log('setting body:', req.body);
         next();
       } catch (e) {
         res.status(400).end();
@@ -89,8 +81,6 @@ itemRouter.patch('/:id', (req, res) => {
     )
     .then((result) => {
       data._id = req.params.id;
-
-      console.log('from THEN ITEMS ', data);
       res.status(200).send(data);
     })
     .catch((err) => {
@@ -123,7 +113,6 @@ itemRouter.post('/', (req, res) => {
     .insertOne(data)
     .then((result) => {
       data._id = result.insertedId;
-      console.log('from THEN ITEMS ', data);
       res.status(201).send(data);
     })
     .catch((err) => {
@@ -166,7 +155,6 @@ listRouter.get('/', (req, res) => {
 });
 
 function removeBlankSpace(data) {
-  console.log('I AM ', data);
   let removeWhiteSpace = data.name.trim();
   return removeWhiteSpace;
 }
@@ -191,8 +179,6 @@ listRouter.post('/', (req, res) => {
     .insertOne(data)
     .then((result) => {
       data._id = result.insertedId;
-
-      console.log('from THEN LISTS ', data);
       res.status(201).send(data);
     })
     .catch((err) => {
@@ -223,7 +209,6 @@ listRouter.delete('/:id', (req, res) => {
         .find({ _id: createObjectId(id) })
         .toArray()
         .then((data) => {
-          console.log('is list removed function before if ', data);
           if (data.length === 0) {
             res.status(204).end();
           } else {
@@ -237,7 +222,36 @@ listRouter.delete('/:id', (req, res) => {
       res.status(500).end();
     });
 });
-// listRouter.patch('/board/:id', (req, res) => {}); // ********* EXTRA UPPDATERA NAMNET
+
+listRouter.patch('/:id', (req, res) => {
+  let id = req.params.id;
+  let data = req.body;
+
+  if (!data) {
+    res.status(400).end();
+    return;
+  }
+
+  const db = getDB();
+
+  db.collection('lists')
+    .updateOne(
+      { _id: createObjectId(id) },
+      {
+        $set: {
+          name: data.name,
+        },
+      }
+    )
+    .then((result) => {
+      data._id = req.params.id;
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).end();
+    });
+});
 
 app.use('/lists', listRouter);
 

@@ -5,7 +5,6 @@ import MoveItem from './MoveItem';
 
 export default function ItemPopup({
   item,
-  setShowPopup,
   deactivateModal,
   updateItem,
   allLists,
@@ -20,7 +19,6 @@ export default function ItemPopup({
   });
   const [selectValue, setSelectValue] = useState(item.listId);
 
-  // console.log('Selected listID ', selectValue);
   useEffect(() => {
     setSelectValue(item.listId);
   }, [item]);
@@ -38,7 +36,6 @@ export default function ItemPopup({
   function handleSelectValue(e) {
     setSelectValue(e.target.value);
     setInputValue({ ...inputValue, listId: e.target.value });
-    console.log(inputValue);
   }
 
   function handleInputChange(e) {
@@ -57,14 +54,12 @@ export default function ItemPopup({
     };
     e.preventDefault();
     updateItem(e, item._id, data);
-    // setShowPopup(false);
     deactivateModal();
   }
 
   function handleDelete(e) {
     deleteItem(e, item._id);
     deactivateModal();
-    // setShowPopup(false);
   }
 
   return (
@@ -74,7 +69,7 @@ export default function ItemPopup({
       initialFocus='#demo-one-deactivate'
       underlayStyle={{ paddingTop: '7em' }}
     >
-      <div id='demo-one-modal' className='modal' >
+      <div id='demo-one-modal' className='modal'>
         <form onSubmit={(e) => handleUpdate(e)} className='popUpContainer'>
           <button
             onClick={() => deactivateModal()}
