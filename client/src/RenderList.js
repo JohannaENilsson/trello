@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import CreateTodo from './CreateTodo';
 import ItemPopup from './ItemPopup';
 
+
 function RenderList({
   allLists,
   deleteList,
@@ -13,6 +14,7 @@ function RenderList({
 }) {
   const [showPopup, setShowPopup] = useState(false);
   const [item, setItem] = useState(null);
+  
 
   // const [newList, setNewList] = useState('New list');
   // const [newListName, setNewListName] = useState('List name');
@@ -32,6 +34,10 @@ function RenderList({
     setItem(item);
   }
 
+  function deactivateModal() {
+    setShowPopup(false);
+  }
+
   function renderItems(listId) {
     if (!allItems) {
       return <p>Loading...</p>;
@@ -41,7 +47,7 @@ function RenderList({
       return allItems.map((item) => {
         // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
-          console.log(item._id);
+          // console.log(item._id);
           return (
             <li
               key={item._id}
@@ -77,6 +83,7 @@ function RenderList({
   } else {
     listInfo = allLists.map((list) => {
       let item = renderItems(list._id);
+     
       return (
         <section className='listContainer' key={list._id}>
           <h2>{list.name}</h2>
@@ -97,6 +104,7 @@ function RenderList({
 
           <ul>{item}</ul>
           {<CreateTodo listId={list._id} addTodo={addTodo} />}
+          
         </section>
       );
     });
@@ -112,8 +120,10 @@ function RenderList({
           updateItem={updateItem}
           allLists={allLists}
           deleteItem={deleteItem}
+          deactivateModal={deactivateModal}
         />
       ) : null}
+      
     </>
   );
 }

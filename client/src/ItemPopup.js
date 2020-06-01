@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
+import AriaModal from 'react-aria-modal';
 
 import MoveItem from './MoveItem';
 
 export default function ItemPopup({
   item,
   setShowPopup,
+  deactivateModal,
   updateItem,
   allLists,
   deleteItem,
@@ -39,7 +40,7 @@ export default function ItemPopup({
     setInputValue({ ...inputValue, listId: e.target.value });
     console.log(inputValue);
   }
-  
+
   function handleInputChange(e) {
     const target = e.target;
     const value = target.value;
@@ -49,33 +50,42 @@ export default function ItemPopup({
 
   function handleUpdate(e) {
     let data = {
-    name: inputValue.name,
-    description: inputValue.description,
-    listId: inputValue.listId,
-    time: inputValue.time,
-
-    }
+      name: inputValue.name,
+      description: inputValue.description,
+      listId: inputValue.listId,
+      time: inputValue.time,
+    };
     e.preventDefault();
     updateItem(e, item._id, data);
-    setShowPopup(false);
+    // setShowPopup(false);
+    deactivateModal();
   }
 
   function handleDelete(e) {
     deleteItem(e, item._id);
-    setShowPopup(false);
+    deactivateModal();
+    // setShowPopup(false);
   }
 
-  return ReactDOM.createPortal(
-    <div className='popUpBackground' role='dialog'>
-          <form onSubmit={(e) => handleUpdate(e)} className='popUpContainer'>
+  return (
+    <AriaModal
+      titleText='Change item'
+      onExit={deactivateModal}
+      initialFocus='#demo-one-deactivate'
+      underlayStyle={{ paddingTop: '7em' }}
+    >
+      <div id='demo-one-modal' className='modal' >
+        <form onSubmit={(e) => handleUpdate(e)} className='popUpContainer'>
           <button
-            onClick={() => setShowPopup(false)}
+            onClick={() => deactivateModal()}
             className='material-icons close'
           >
             <span>cancel</span>
           </button>
 
-          <label htmlFor='name'>Todo:</label>
+          <label htmlFor='name' className='hideLabel'>
+            Name:
+          </label>
           <input
             type='text'
             name='name'
@@ -105,13 +115,16 @@ export default function ItemPopup({
             <button onClick={(e) => handleDelete(e)} className='material-icons'>
               <span>delete</span>
             </button>
-            <button type='submit' className='material-icons'>
+            <button
+              type='submit'
+              className='material-icons'
+              id='demo-one-deactivate'
+            >
               <span>check_circle</span>
             </button>
           </div>
         </form>
-    </div>,
-
-    document.body
+      </div>
+    </AriaModal>
   );
 }

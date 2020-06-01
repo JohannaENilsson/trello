@@ -7,7 +7,7 @@ export default function CreateList({setNewList, createNewList, invalidListName, 
         <section className='listContainer'>
           <h2>New list</h2>
           <form onSubmit={(e) => createNewList(e)}>
-          <label htmlFor='list'>
+          <label htmlFor='list' className='hideLabel'>
             Name on new list:
             </label>
             <input

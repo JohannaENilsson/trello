@@ -36,7 +36,7 @@ export default function CreateTodo({ listId, addTodo }) {
 
   return (
     <><form onSubmit={(e) => submitTodo(e)}>
-      <label htmlFor={`name_${listId}`}>
+      <label htmlFor={`name_${listId}`} className='hideLabel'>
         New todo
         </label>
         <input

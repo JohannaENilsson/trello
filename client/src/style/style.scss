@@ -11,7 +11,6 @@ body {
 }
 
 .board {
-  // rör ej
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -19,7 +18,7 @@ body {
 }
 
 main {
-  height: 90%; // rör ej
+  height: 90%; 
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -48,7 +47,7 @@ footer {
   background-color: $containerColor;
   text-align: center;
 
-  p{
+  p {
     margin-block-end: 0;
     margin-block-start: 0;
   }
@@ -56,7 +55,6 @@ footer {
 
 .listContainer {
   border: 10px dotted $complementary;
-  // background-color: $activeColor;
   margin: 3% 0;
   padding: 1%;
   box-sizing: border-box;
@@ -147,7 +145,6 @@ footer {
 }
 
 .message {
-  // vid fel
   display: flex;
   align-items: center;
   justify-content: center;
@@ -161,7 +158,7 @@ ul {
   padding-inline-start: 0;
 }
 
-label {
+.hideLabel {
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
@@ -172,29 +169,23 @@ label {
   width: 1px;
 }
 
-.popUpBackground {
-  height: 100vh;
-  width: 100%;
-  background-color: transparentize($backgroundColor, 0.5);
+.modal {
+  border: 10px dotted $complementary;
+  border-radius: 7px;
+  height: 330px;
+  width: 300px;
 
-  position: absolute;
-  top: 0;
-  left: 0;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .popUpContainer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -150px;
-    margin-left: -150px;
-
+    position: relative;
     box-sizing: border-box;
-    background-color: $complementary;
+    background-color: $backgroundColor;
 
-    // border: 10px dotted $sec;
     border-radius: 7px;
     height: 300px;
-    width: 300px;
+    width: 270px;
 
     padding: 2% 2% 1% 2%;
     display: flex;
@@ -212,15 +203,18 @@ label {
     input {
       margin: 10px 0;
       border: none;
-      background-color: $sec;
+      background-color: $activeColor;
       padding-left: 8px;
       width: 160px;
-      &:focus,
-      &:hover {
+      &:focus{
         background-color: $itemColor;
       }
+      
+      &:hover {
+        background-color: $sec;
+      }
       &:active {
-        background-color: $activeColor;
+        background-color: $itemColor;
       }
     }
     select {
@@ -228,15 +222,18 @@ label {
       width: 160px;
       margin: 5px 0;
       border: none;
-      background-color: $sec;
+      background-color: $activeColor;
       outline: none;
 
-      &:focus,
-      &:hover {
+      &:focus{
         background-color: $itemColor;
       }
+      
+      &:hover {
+        background-color: $sec;
+      }
       &:active {
-        background-color: $activeColor;
+        background-color: $itemColor;
       }
     }
     .close {
@@ -248,7 +245,7 @@ label {
     button {
       cursor: pointer;
       position: relative;
-      background-color: $complementary;
+      background-color: $backgroundColor;
       border: none;
       width: 50px;
       font-size: 50px;
@@ -256,7 +253,7 @@ label {
       outline: none;
       &:focus,
       &:hover {
-        color: $itemColor;
+        color: $sec;
       }
       &:active {
         color: $activeColor;
