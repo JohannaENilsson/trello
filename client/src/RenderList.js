@@ -20,7 +20,7 @@ function RenderList({
 
   function handleListPopup(name) {
     setShowListPopup(true);
-    setList(name)
+    setList(name);
   }
 
   function handleItemPopup(item) {
@@ -40,7 +40,6 @@ function RenderList({
       return <p>You have no todos</p>;
     } else {
       return allItems.map((item) => {
-        // get item som matchar list id ---> byt till snyggare
         if (listId === item.listId) {
           return (
             <li
@@ -80,14 +79,18 @@ function RenderList({
 
       return (
         <section className='listContainer' key={list._id}>
-          <h2 onClick={() => handleListPopup(list)} style={{cursor: 'pointer'}}>{list.name}</h2>
+          <h2
+            onClick={() => handleListPopup(list)}
+            style={{ cursor: 'pointer' }}
+          >
+            {list.name}
+          </h2>
           <button
             onClick={() => handleListPopup(list)}
             className='material-icons'
           >
             <span>edit</span>
           </button>
-         
 
           <ul>{item}</ul>
           {<CreateTodo listId={list._id} addTodo={addTodo} />}

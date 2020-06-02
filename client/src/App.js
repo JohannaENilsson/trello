@@ -42,7 +42,6 @@ function App() {
   function addTodo(e, id, newTodo) {
     e.preventDefault();
     newTodo.listId = id;
-    // console.log('Create todo in list id ', id, newTodo);
     axios
       .post('/items', newTodo)
       .then((res) => {
@@ -135,12 +134,11 @@ function App() {
 
   function changeListName(e, listId, list) {
     e.preventDefault();
-    console.log(listId, list);
+    // console.log(listId, list);
     axios
       .patch(`/lists/${listId}`, list)
       .then((res) => {
-        console.log('Res List ', res.data);
-
+        // console.log('Res List ', res.data);
         setAllLists([
           ...allLists.filter((x, i) => x._id !== listId),
           res.data,

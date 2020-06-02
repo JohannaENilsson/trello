@@ -34,9 +34,10 @@ export default function CreateTodo({ listId, addTodo }) {
   }
 
   return (
-    <><form onSubmit={(e) => submitTodo(e)}>
-      <label htmlFor={`name_${listId}`} className='hideLabel'>
-        New todo
+    <>
+      <form onSubmit={(e) => submitTodo(e)}>
+        <label htmlFor={`name_${listId}`} className='hideLabel'>
+          New todo
         </label>
         <input
           minLength='1'
@@ -47,20 +48,11 @@ export default function CreateTodo({ listId, addTodo }) {
           value={newTodo.name}
           onChange={handleInputChange}
         />
-      
-      {/* <label>
-        Description:
-        <input
-          id={`description_${listId}`}
-          type='text'
-          name='description'
-          placeholder='Description'
-          value={newTodo.description}
-          onChange={handleInputChange}
-        />
-      </label> */}
-      <button type='submit' className="material-icons"><span>add_circle</span></button>
-      {invalidTodo && <p>Todo can't be empty</p>}
+
+        <button type='submit' className='material-icons'>
+          <span>add_circle</span>
+        </button>
+        {invalidTodo && <p>Todo can't be empty</p>}
       </form>
     </>
   );
