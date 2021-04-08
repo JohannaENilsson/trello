@@ -5,4 +5,6 @@ Project made for my backend course.
 ### Run app
 
 ```
-yarn
+yarn start
+
+nodemon server.js
